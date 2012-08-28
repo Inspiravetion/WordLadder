@@ -1,0 +1,202 @@
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <style type="text/css">
+    	body{
+    		padding-top: 60px;
+    		padding-bottom: 40px;
+    	}
+    	.sidebar-nav{
+    		padding: 9px 0;
+    		ou
+    	}
+    	.centertext{
+    		text-align: center;
+    	}
+    	.lefttext{
+    		text-align: left;
+    	}
+    	.hero-unit{
+    		background-color: #ddd;
+    	}
+    	.result{
+    		background-color: #eee;
+    	}
+    	.column-title{
+    		border-bottom: 1px solid;
+    		border-color: #ddd;
+    		padding-bottom: 5px;
+    	}
+    	.styledListElement{
+    		/*border-bottom: 1px solid;
+    		border-color: #fff;*/
+    		margin-top:0;
+    		margin-bottom:0;
+    		height: 40px;
+    		background: -webkit-linear-gradient(top, #eee, #ddd);
+
+    	}
+    	.styledListElement:hover{
+    		background: -webkit-linear-gradient(top, #08c, #04c);
+    		color: white;
+    	}
+    	.styledListContainer{
+    		overflow: scroll;
+    		height:	100%;
+    	}
+    	.largeButtonBottom{
+    		height:	-webkit-calc(100% - 38px);
+    		height: calc(100% - 38px);
+    	}
+    	/*
+    	#first{
+    		border-left-width: 1;
+			border-left-color: black;
+			border-left-style: solid;
+    	}
+    	#second{
+    		border-right-width: 1;
+			border-right-color: black;
+			border-right-style: solid;
+			border-left-width: 1;
+			border-left-color: black;
+			border-left-style: solid;
+    	}
+    	#third{
+    		border-right-width: 1;
+			border-right-color: black;
+			border-right-style: solid;
+    	}*/
+    </style>
+  </head>
+  <body>
+    <div class='navbar navbar-inverse navbar-fixed-top'>
+    	<div class="navbar-inner">
+	    	<div class='container'>
+	    		<a href="#" class="brand" style='margin-left:0px;'>Word Ladder</a>
+	    		<div class="nav-collapse collapse">
+	    			<ul class="nav">
+	    				<li class='active'> 
+	    					<a href='#'>Part A</a>
+	    				</li>
+	    				<li>
+	    					<a href='#'>Part B</a>
+	    				</li>
+	    				<li>
+	    					<a href='#'>Part C</a>
+	    				</li>
+	    				<li> 
+	    					<a href='#'>Part D</a>
+	    				</li>
+	    			</ul>
+	    		</div>
+	    	</div>
+    	</div>
+    </div>
+    <div class="container-fluid">
+    	<div class="row-fluid">
+    		<div class="span3">
+    			<div class="hero-unit" style='padding:30px; height:640;'>
+    				<div class="row-fluid">
+    					<div class="span12 centertext hero-unit result" style="padding:10px;height:640;padding-bottom:60px;">
+    						<p>
+    							<h4 class='column-title'>Word List</h4>
+    							<div class="styledListContainer largeButtonBottom">
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    								<p class="styledListElement">Some Word</p>
+    							</div>
+    							<div class="row-fluid">
+    								<div class="span6">
+    									<div class="lefttext" style='margin-top:5px;'>From:</div>
+    									<div class="lefttext">To:</div>
+    								</div>
+    								<a class="btn btn-primary btn-large span6" style='margin-top:8px;' id='Climb'>Climb</a>
+    							</div>
+    						</p>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="span6">
+    			<div class="hero-unit" style='padding:30px; height:640;'> 
+    				<div class="row-fluid">
+    					<div class="span4 centertext hero-unit result" id='first'style="padding:10px;height:640;">
+    						<p><h4 class='column-title'>First Best</h4></p>
+    					</div>
+    					
+    					<div class="span4 centertext hero-unit result" id='second' style="padding:10px;height:640;">
+    						<p><h4 class='column-title'>Second Best</h4></p>
+    					</div>
+    					
+    					<div class="span4 centertext hero-unit result" id='third' style="padding:10px;height:640;">
+    						<p><h4 class='column-title'>Third Best</h4></p>
+    					</div>
+    				</div>
+    			</div> 
+    		</div>
+    		<div class="span3">
+    			<div class="hero-unit" style='padding:30px; height:640;'>
+		    		<div class='row-fluid'>
+		    			<div class=" span12 centertext hero-unit result" style="padding:10px; height:640;padding-bottom:60px;">
+							<p>
+								<h4 class='column-title'>All Posibilities</h4>
+								<div class='styledListContainer'>
+									<p class="styledListElement">5 Steps</p>
+									<p class="styledListElement">6 Steps</p>
+									<p class="styledListElement">7 Steps</p>
+									<p class="styledListElement">8 Steps</p>
+									<p class="styledListElement">9 Steps</p>
+									<p class="styledListElement">10 Steps</p>
+									<p class="styledListElement">11 Steps</p>
+									<p class="styledListElement">12 Steps</p>
+									<p class="styledListElement">13 Steps</p>
+									<p class="styledListElement">14 Steps</p>
+									<p class="styledListElement">15 Steps</p>
+									<p class="styledListElement">16 Steps</p>
+									<p class="styledListElement">17 Steps</p>
+									<p class="styledListElement">18 Steps</p>
+									<p class="styledListElement">19 Steps</p>
+									<p class="styledListElement">20 Steps</p>
+									<p class="styledListElement">21 Steps</p>
+									<p class="styledListElement">22 Steps</p>
+									<p class="styledListElement">23 Steps</p>
+									<p class="styledListElement">24 Steps</p>
+								</div>
+							</p>
+						</div>
+					</div>
+				</div>
+    		</div>
+    	</div>
+    </div>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src='socket.io/socket.io.js' type="text/javascript"></script>
+    <script src='scripts/WordLadderA.js' type="text/javascript"></script>
+  </body>
+</html>
