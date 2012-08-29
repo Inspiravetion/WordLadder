@@ -73,12 +73,54 @@ function bootstrapRCSS() {
 
 //SOCKET SETUP=================================================================
 io.sockets.on('connection', function(socket){
+	var A = new Alphabet();
+	console.log(A);
 
+	
 
 });
 
 //CLIMBING ALGORYTHM===========================================================
 
 
+//CLASSES======================================================================
+
+Letter = function(character){
+	var self       = this;
+	this.parents   = [];
+	this.children  = [];
+	this.character = character;
+	this.addParent = function(p){
+		if(typeof p == Letter){
+			self.parents.push(p);
+		}
+	};
+	this.addChild  = function(c){
+		if(typeof c == Letter){
+			self.children.push(c);
+			c.addParent(this);
+		}
+	};
+	this.character = function(){
+		return self.character;
+	};
+	return this;
+};
+
+Alphabet = function(){
+	var self   = this,
+	characters = ['a','b','c','d','e','f','g','e','f','h','i','j','k','l',
+	'm','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+	for(c in characters){
+		self[characters[c]] = new Letter(characters[c]);
+	}
+	return this;
+};
 
 //HELPERS======================================================================
+
+function generateDictionary(){
+	var file = fs.readFileSync(__dirname + '/../serverside/dictionary.txt','utf8'),
+	words    = file.split('\n');
+	return words;
+}
