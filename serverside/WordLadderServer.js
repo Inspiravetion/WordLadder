@@ -80,8 +80,46 @@ io.sockets.on('connection', function(socket){
 
 });
 
-//CLIMBING ALGORYTHM===========================================================
+//CLIMBING ALGORITHM===========================================================
 
+climb = function(start, end, dict){
+	var top, bottom;
+	for(var i = 0; i < dict.length;i++){
+		if(dict[i].value == start){
+			top = dict[i];
+		}
+		if(dict[i].value == end){
+			bottom = dict[i];
+		}
+		if(top && bottom){
+			break;
+		}
+	}
+	var answer = solve(top, top, bottom, [], true);
+	console.log(answer);
+};
+
+solve = function(current, start, target, checked, startFlag){
+	if(current === target){
+		return current.value;
+	}
+	else if((current === start && !startFlag) || (current.similar.length == 0)
+		|| (checked.indexOf(current) != -1)){
+		return null;
+	}
+	else {
+		checked.push(current);
+		var answer = current.value;
+		for(s in current.similar){
+			var temp = solve(current.similar[s], start, target, checked, false);
+			if(temp){
+				answer += ' ' + temp;
+				return answer;
+			}
+		}
+		return 'no answer';
+	}
+};
 
 //CLASSES======================================================================
 
@@ -117,10 +155,165 @@ Alphabet = function(){
 	return this;
 };
 
+NestedBST = function(rootData){
+	var self = this;
+	this.root  = new BST(rootData);
+
+	this.add = function(data){
+		var child = new BST(data);
+		self.root.addChild(child);
+	};
+
+	this.print = function(){
+		var spaces = 0;
+		console.log('\n' + 'Nested Tree:\n');
+		self.root.print(0);
+	}; 
+};
+
+BST = function(data){
+	var self         = this;
+	this.payLoad     = data;
+	this.leftChild   = null;
+	this.rightChild  = null;
+	this.nestedRight = null;
+	this.nestedLeft  = null;
+	
+	this.addChild   = function(child, nest){
+		var left, right;
+		if(nest){
+			left  = 'nestedLeft';
+			right = 'nestedRight';
+		}
+		else{
+			left  = 'leftChild';
+			right = 'rightChild'; 
+		}
+		if(child instanceof BST && child.payLoad){
+			if(child.payLoad < self.payLoad){
+				if(self[left]){
+					self[left].addChild(child, nest);
+				}
+				else{
+					self[left] = child;
+				}
+				return true;
+			} 
+			else{
+				if(self[right]){
+					self[right].addChild(child, nest);
+				}
+				else{
+					self[right] = child;
+				}
+				return true;
+			}
+		}
+		else if (!child || !child instanceof BST){
+			console.log('ERROR:: Child must be an instance of BST.');
+			return false;
+		}
+		else {
+			console.log('ERROR:: Child has no data in its payload.');
+			return false;
+		}
+	};
+
+	this.addNestedChild = function(child){
+		self.addChild(child, true);
+	};
+
+	this.print = function(spaces){
+		var padding = '';
+		for(var i = 0; i < spaces; i++){
+			padding += '  ';
+		}
+		console.log(padding + self.payLoad + '\n');
+		if(self.nestedLeft){
+			self.nestedLeft.print(spaces + 1);
+		}
+		if(self.nestedRight){
+			self.nestedRight.print(spaces + 1);
+		}
+		if(self.leftChild){
+			self.leftChild.print(spaces + 1);
+		}
+		if(self.rightChild){
+			self.rightChild.print(spaces + 1);
+		}
+	}
+
+};
+
+Dictionary = function(path){
+	var file = fs.readFileSync(__dirname + path,'utf8'),
+	//TODO FIGURE OUT HOW TO DETERMINE LIKE TERNIMNATION CHARACTER
+	//words    = file.split('\r\n'),
+	words    = file.split('\n'),
+	self     = this,
+	wordObjs = [];
+	for(w in words){
+		//store just words to be displayed to the client
+		wordObjs.push(new Word(words[w]));
+	}
+	linkWords(wordObjs);
+	//console.log(wordObjs); 
+	return wordObjs;
+};
+
+Word = function(word){
+	var self     = this;
+	this.length  = word.length;
+	this.value   = word;
+	this.similar = [];
+	this.link    = function(linkWord){
+		if(!word instanceof Word){
+			console.log('ERROR:: Cannot link a Word to a non-Word Object.');
+		}
+		else{
+			self.similar.push(linkWord);
+			linkWord.similar.push(self);
+		}
+	};
+	return this;
+};
+
+//Testing
+
+	var nbst = new NestedBST('c');
+	nbst.add('a');
+	nbst.add('u');
+	//nbst.print();
+	nbst.root.leftChild.addNestedChild(new BST('t'));
+	nbst.root.leftChild.addNestedChild(new BST('p'));
+	nbst.root.rightChild.addNestedChild(new BST('t'));
+	nbst.root.rightChild.addNestedChild(new BST('p'));
+	//nbst.print();
+
+	var dict = new Dictionary('/../serverside/dictionary.txt');
+	climb('stone', 'money', dict);
+
+
 //HELPERS======================================================================
 
-function generateDictionary(){
-	var file = fs.readFileSync(__dirname + '/../serverside/dictionary.txt','utf8'),
-	words    = file.split('\n');
-	return words;
-}
+
+
+function linkWords(array){
+	for(var i = 0; i < array.length - 1; i++){
+		for(var j = i + 1; j < array.length; j++){
+			if(array[i].length == array[j].length && oneAway(array[i].value, array[j].value)){
+				array[i].link(array[j]);
+			}
+		}
+	}
+};
+
+function oneAway(stringA, stringB){
+	var diff = 0;
+	for(var i = 0; i < stringA.length; i++){
+		if(stringA[i] !== stringB[i]){
+			diff++;
+		}
+	}
+	return diff == 1? true: false; 
+};
