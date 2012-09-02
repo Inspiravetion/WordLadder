@@ -83,6 +83,7 @@ io.sockets.on('connection', function(socket){
 //CLIMBING ALGORITHM===========================================================
 
 climb = function(start, end, dict){
+	var startTime = new Date().getMilliseconds();
 	var top, bottom;
 	for(var i = 0; i < dict.length;i++){
 		if(dict[i].value == start){
@@ -95,40 +96,30 @@ climb = function(start, end, dict){
 			break;
 		}
 	}
-
-	//for(var i = 0; i < top.similar.length; i++){ //ISSUE 1
-		var answer = solve(top, top, bottom, [], true, i);
-		for(a in answer){
-			if(typeof answer[a] != 'function'){
-				console.log(answer[a] + '');
-			}
+	//reporting the results
+	var answer = solve(top, top, bottom, [], true, i);
+	answer.sort(function(a,b){
+		if((a.split(' ').length) > (b.split(' ').length)){
+			return 1;
 		}
-	//}
+		else if((a.split(' ').length) < (b.split(' ').length)){
+			return -1;
+		}
+		return 0;
+	});
+	for(a in answer){
+		console.log(answer[a] + '');
+	}
+	var endTime = new Date().getMilliseconds();
+	console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 };
 
-//ISSUE 1) ONLY ITERATES THROUGH THE STARTING WORDS SIMILAR LIST SO IT DOESNT TEST
-//EVERY POSSIBLE OUTCOME...STORE ANSWERS IN EACH LEVEL BEFORE RETURNING THEM?
-
-//PASS IN AN OBJECT THAT HAS A CHANGEABLE FIELD THAT EACH LEVEL CAN CHANGE AND USE
-//THAT VALUE INS A WHILE STATEMENT IN THE HEAD/RECURSIVE STATEMENT ONE...NOT STOPPING UNTIL IT IS CHANGED
-//FOR GOOD...ONLY CHANGE IT FOR GOOD WHEN EVERY SIMILAR WORD IN EACH WORDS SIMILAR LIST
-//HAS BEEN TRIED...OR MAYBE PUT IT INTO EACH WORD ITSELF***
-
-//ISSUE 2) INSIDE THE RECURSION WE ARE HAVING THE SAME ISSUE ON THE LOWER LEVEL
-
-//ISSUE 3) RESETTING THE CHECKED ARRAY...OR DO WE NEED TO DO THAT?
-
-//RETURNING ANSWERS AS AN ARRAY AND GOING THROUGH THAT ARRAY TO ADD THE UPPER LEVEL TO
-//IT...SHOULD FINALLY RETURN A BIG ARRAY OF ALL THE POSSIBLE OUTCOMES
-
 solve = function(current, start, target, checked, startFlag, startOffset){
-	//console.log('CURRENT:: ' + current.value);
 	if(current === target){
 		return [current.value];
 	}
 	else if((current === start && !startFlag) || (current.similar.length == 0)
 		|| (checked.indexOf(current) != -1)){
-		//console.log(current.similar.length == 0? 'No more similar.' : 'This has already been checked.' );
 		return null;
 	}
 	else {
@@ -136,8 +127,6 @@ solve = function(current, start, target, checked, startFlag, startOffset){
 		var offset = startFlag? startOffset : 0,
 		allAnswers = [];
 		while (!current.doneChecking()){
-		//for(var i = offset; i < current.similar.length;i++){ //ISSUE 2
-			//REMOVING STUFF FROM THE SIMILAR LIST HOSES THE WORD OBJECT!!!
 			var similarW = current.similar[current.getOffset()],
 			recAnswer    = solve(similarW, start, target, checked, false);
 			current.checkedNext();
@@ -147,10 +136,6 @@ solve = function(current, start, target, checked, startFlag, startOffset){
 				}
 			}
 		}
-		/*for (c in checked){
-			console.log(checked[c].value);
-		}
-		console.log();*/
 		current.reset();
 		remove(current, checked);
 		return allAnswers.length != 0? allAnswers : null;
@@ -340,7 +325,9 @@ Word = function(word){
 	//nbst.print();
 
 	var dict = new Dictionary('/../serverside/dictionary.txt');
-	//climb('stone', 'money', dict);
+	console.log('STONE -> MONEY:');
+	climb('stone', 'money', dict);
+	console.log('CATS -> BARK:');
 	climb('cats', 'bark', dict);
 
 
