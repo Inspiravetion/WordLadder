@@ -96,14 +96,14 @@ climb = function(start, end, dict){
 		}
 	}
 
-	for(var i = 0; i < top.similar.length; i++){ //ISSUE 1
+	//for(var i = 0; i < top.similar.length; i++){ //ISSUE 1
 		var answer = solve(top, top, bottom, [], true, i);
 		for(a in answer){
 			if(typeof answer[a] != 'function'){
 				console.log(answer[a] + '');
 			}
 		}
-	}
+	//}
 };
 
 //ISSUE 1) ONLY ITERATES THROUGH THE STARTING WORDS SIMILAR LIST SO IT DOESNT TEST
