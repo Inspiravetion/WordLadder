@@ -72,8 +72,14 @@ function bootstrapRCSS() {
 }
 
 //SOCKET SETUP=================================================================
+var wordlist = [];
 io.sockets.on('connection', function(socket){
 
+	socket.on('climb', function(params) {
+		climb(params.start, params.end, dict);
+	});
+
+	socket.emit('wordlist', wordlist);
 
 });
 
@@ -174,6 +180,7 @@ Dictionary = function(path){
 	wordObjs = [];
 	for(w in words){
 		wordObjs.push(new Word(words[w]));
+		wordlist.push(words[w]);
 	}
 	linkWords(wordObjs);
 	return wordObjs;

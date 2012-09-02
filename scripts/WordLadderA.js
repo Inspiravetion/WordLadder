@@ -18,7 +18,9 @@ var wordlist = document.getElementById('wordlist'),
 //functions====================================================================
 
 function climb(){
-	alert('Climbing Word Ladder!');
+	var start = document.getElementById('fromlabel').innerText.split('From: ')[1],
+	end       = document.getElementById('tolabel').innerText.split('To: ')[1];
+	socket.emit('climb', {'start': start, 'end': end});
 }
 
 function setLadderPoles(e){ 
@@ -32,5 +34,17 @@ function setLadderPoles(e){
 	}
 }
 
+//Socket Setup=================================================================
+
+socket.on('wordlist', function(array){
+	var wordContainer  = document.getElementById('wordlistcontainer');
+	for (a in array){
+		var word       = document.createElement('p');
+		word.innerText = array[a];
+		word.setAttribute('class', 'styledListElement');
+		word.onclick   = setLadderPoles;
+		wordContainer.appendChild(word);
+	}
+});
 
 }
