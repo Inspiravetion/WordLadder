@@ -98,7 +98,11 @@ climb = function(start, end, dict){
 
 	for(var i = 0; i < top.similar.length; i++){ //ISSUE 1
 		var answer = solve(top, top, bottom, [], true, i);
-		console.log(answer);
+		for(a in answer){
+			if(typeof answer[a] != 'function'){
+				console.log(answer[a] + '');
+			}
+		}
 	}
 };
 
@@ -106,36 +110,50 @@ climb = function(start, end, dict){
 //EVERY POSSIBLE OUTCOME...STORE ANSWERS IN EACH LEVEL BEFORE RETURNING THEM?
 
 //PASS IN AN OBJECT THAT HAS A CHANGEABLE FIELD THAT EACH LEVEL CAN CHANGE AND USE
-//THAT VALUE INS A WHILE STATEMENT IN THE HEAD ONE...NOT STOPPING UNTIL IT IS CHANGED
+//THAT VALUE INS A WHILE STATEMENT IN THE HEAD/RECURSIVE STATEMENT ONE...NOT STOPPING UNTIL IT IS CHANGED
 //FOR GOOD...ONLY CHANGE IT FOR GOOD WHEN EVERY SIMILAR WORD IN EACH WORDS SIMILAR LIST
-//HAS BEEN TRIED...OR MAYBE PUT IT INTO EACH WORD ITSELF
+//HAS BEEN TRIED...OR MAYBE PUT IT INTO EACH WORD ITSELF***
 
 //ISSUE 2) INSIDE THE RECURSION WE ARE HAVING THE SAME ISSUE ON THE LOWER LEVEL
+
+//ISSUE 3) RESETTING THE CHECKED ARRAY...OR DO WE NEED TO DO THAT?
+
+//RETURNING ANSWERS AS AN ARRAY AND GOING THROUGH THAT ARRAY TO ADD THE UPPER LEVEL TO
+//IT...SHOULD FINALLY RETURN A BIG ARRAY OF ALL THE POSSIBLE OUTCOMES
 
 solve = function(current, start, target, checked, startFlag, startOffset){
 	//console.log('CURRENT:: ' + current.value);
 	if(current === target){
-		return current.value;
+		return [current.value];
 	}
 	else if((current === start && !startFlag) || (current.similar.length == 0)
 		|| (checked.indexOf(current) != -1)){
-		//console.log('DEAD END:: ' + current.value);
+		//console.log(current.similar.length == 0? 'No more similar.' : 'This has already been checked.' );
 		return null;
 	}
 	else {
 		checked.push(current);
-		var answer = current.value,
-		offset     = startFlag? startOffset : 0;
-		for(var i = offset; i < current.similar.length;i++){ //ISSUE 2
-			//console.log('CURRENTLY CHECKING:: ' + current.similar[i].value);
-			var temp = solve(current.similar[i], start, target, checked, false);
-			if(temp){
-				//console.log('ANSWER:: ' + temp);
-				answer += ' ' + temp;
-				return answer; 
+		var offset = startFlag? startOffset : 0,
+		allAnswers = [];
+		while (!current.doneChecking()){
+		//for(var i = offset; i < current.similar.length;i++){ //ISSUE 2
+			//REMOVING STUFF FROM THE SIMILAR LIST HOSES THE WORD OBJECT!!!
+			var similarW = current.similar[current.getOffset()],
+			recAnswer    = solve(similarW, start, target, checked, false);
+			current.checkedNext();
+			if(recAnswer){
+				for(a in recAnswer){
+					allAnswers.push(current.value + ' ' + recAnswer[a]);
+				}
 			}
 		}
-		return null;
+		/*for (c in checked){
+			console.log(checked[c].value);
+		}
+		console.log();*/
+		current.reset();
+		remove(current, checked);
+		return allAnswers.length != 0? allAnswers : null;
 	}
 };
 
@@ -283,15 +301,28 @@ Word = function(word){
 	var self     = this;
 	this.length  = word.length;
 	this.value   = word;
+	this.offset  = 0;
 	this.similar = [];
 	this.link    = function(linkWord){
 		if(!word instanceof Word){
 			console.log('ERROR:: Cannot link a Word to a non-Word Object.');
+			return false;
 		}
-		else{
-			self.similar.push(linkWord);
-			linkWord.similar.push(self);
-		}
+		self.similar.push(linkWord);
+		linkWord.similar.push(self);
+		return true;
+	};
+	this.checkedNext = function(){
+		self.offset++;
+	};
+	this.doneChecking = function(){
+		return self.similar.length == self.offset;
+	};
+	this.getOffset = function(){
+		return self.offset;
+	};
+	this.reset = function(){
+		self.offset = 0;
 	};
 	return this;
 };
@@ -336,3 +367,11 @@ function oneAway(stringA, stringB){
 	}
 	return diff == 1? true: false; 
 };
+
+function remove(val, array) {
+	if(array.indexOf(val) != -1){
+		array.splice(array.indexOf(val), 1);
+		return true;
+	}
+	return false;
+}
