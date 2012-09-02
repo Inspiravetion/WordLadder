@@ -95,29 +95,47 @@ climb = function(start, end, dict){
 			break;
 		}
 	}
-	var answer = solve(top, top, bottom, [], true);
-	console.log(answer);
+
+	for(var i = 0; i < top.similar.length; i++){ //ISSUE 1
+		var answer = solve(top, top, bottom, [], true, i);
+		console.log(answer);
+	}
 };
 
-solve = function(current, start, target, checked, startFlag){
+//ISSUE 1) ONLY ITERATES THROUGH THE STARTING WORDS SIMILAR LIST SO IT DOESNT TEST
+//EVERY POSSIBLE OUTCOME...STORE ANSWERS IN EACH LEVEL BEFORE RETURNING THEM?
+
+//PASS IN AN OBJECT THAT HAS A CHANGEABLE FIELD THAT EACH LEVEL CAN CHANGE AND USE
+//THAT VALUE INS A WHILE STATEMENT IN THE HEAD ONE...NOT STOPPING UNTIL IT IS CHANGED
+//FOR GOOD...ONLY CHANGE IT FOR GOOD WHEN EVERY SIMILAR WORD IN EACH WORDS SIMILAR LIST
+//HAS BEEN TRIED...OR MAYBE PUT IT INTO EACH WORD ITSELF
+
+//ISSUE 2) INSIDE THE RECURSION WE ARE HAVING THE SAME ISSUE ON THE LOWER LEVEL
+
+solve = function(current, start, target, checked, startFlag, startOffset){
+	//console.log('CURRENT:: ' + current.value);
 	if(current === target){
 		return current.value;
 	}
 	else if((current === start && !startFlag) || (current.similar.length == 0)
 		|| (checked.indexOf(current) != -1)){
+		//console.log('DEAD END:: ' + current.value);
 		return null;
 	}
 	else {
 		checked.push(current);
-		var answer = current.value;
-		for(s in current.similar){
-			var temp = solve(current.similar[s], start, target, checked, false);
+		var answer = current.value,
+		offset     = startFlag? startOffset : 0;
+		for(var i = offset; i < current.similar.length;i++){ //ISSUE 2
+			//console.log('CURRENTLY CHECKING:: ' + current.similar[i].value);
+			var temp = solve(current.similar[i], start, target, checked, false);
 			if(temp){
+				//console.log('ANSWER:: ' + temp);
 				answer += ' ' + temp;
-				return answer;
+				return answer; 
 			}
 		}
-		return 'no answer';
+		return null;
 	}
 };
 
@@ -291,7 +309,8 @@ Word = function(word){
 	//nbst.print();
 
 	var dict = new Dictionary('/../serverside/dictionary.txt');
-	climb('stone', 'money', dict);
+	//climb('stone', 'money', dict);
+	climb('cats', 'bark', dict);
 
 
 //HELPERS======================================================================
