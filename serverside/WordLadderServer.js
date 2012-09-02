@@ -97,7 +97,7 @@ climb = function(start, end, dict){
 		}
 	}
 	//reporting the results
-	var answer = solve(top, top, bottom, [], true, i);
+	var answer = solve(top, top, bottom, [], true);
 	answer.sort(function(a,b){
 		if((a.split(' ').length) > (b.split(' ').length)){
 			return 1;
@@ -114,7 +114,7 @@ climb = function(start, end, dict){
 	console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 };
 
-solve = function(current, start, target, checked, startFlag, startOffset){
+solve = function(current, start, target, checked, startFlag){
 	if(current === target){
 		return [current.value];
 	}
@@ -124,8 +124,7 @@ solve = function(current, start, target, checked, startFlag, startOffset){
 	}
 	else {
 		checked.push(current);
-		var offset = startFlag? startOffset : 0,
-		allAnswers = [];
+		var allAnswers = [];
 		while (!current.doneChecking()){
 			var similarW = current.similar[current.getOffset()],
 			recAnswer    = solve(similarW, start, target, checked, false);
