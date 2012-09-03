@@ -110,21 +110,26 @@ climb = function(start, end, dict){
 	}
 	//reporting the results...this will change
 	var answer = solve(top, top, bottom, [], true);
-	answer.sort(function(a,b){
-		if((a.split(' ').length) > (b.split(' ').length)){
-			return 1;
+	if(answer){
+		answer.sort(function(a,b){
+			if((a.split(' ').length) > (b.split(' ').length)){
+				return 1;
+			}
+			else if((a.split(' ').length) < (b.split(' ').length)){
+				return -1;
+			}
+			return 0;
+		});
+		for(a in answer){
+			console.log(answer[a] + '');
 		}
-		else if((a.split(' ').length) < (b.split(' ').length)){
-			return -1;
-		}
-		return 0;
-	});
-	for(a in answer){
-		console.log(answer[a] + '');
+		var endTime = new Date().getMilliseconds();
+		console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
+		socket.emit('solution', answer);
 	}
-	var endTime = new Date().getMilliseconds();
-	console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
-	socket.emit('solution', answer);
+	else{
+		socket.emit('solution', ['No Answer.', 'No Answer.', 'No Answer.']);
+	}
 };
 
 /*
@@ -177,8 +182,8 @@ solve = function(current, start, target, checked, startFlag){
 Dictionary = function(path){
 	var file = fs.readFileSync(__dirname + path,'utf8'),
 	//TODO FIGURE OUT HOW TO DETERMINE LIKE TERNIMNATION CHARACTER
-	//words    = file.split('\r\n'),
-	words    = file.split('\n'),
+	words    = file.split('\r\n'),
+	//words    = file.split('\n'),
 	self     = this,
 	wordObjs = [];
 	for(w in words){
@@ -227,11 +232,7 @@ Word = function(word){
 
 //Testing
 
-	var dict = new Dictionary('/../serverside/dictionary.txt');
-	/*console.log('STONE -> MONEY:');
-	climb('stone', 'money', dict);
-	console.log('CATS -> BARK:');
-	climb('cats', 'bark', dict);*/
+	var dict = new Dictionary('/../serverside/short_dictionary.txt');
 
 
 //HELPERS======================================================================

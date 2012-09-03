@@ -62,7 +62,12 @@ function showAnswer(e){
 	for(rung in ladder){
 		output+= ladder[rung] + '\n';
 	}
-	alert(output);
+	//document.getElementById('modalmessage').innerText = output;
+	$('#myModal').modal({
+    	keyboard: false,
+    	backdrop: 'static'
+	});
+	startClimbingAnimation();
 }
 
 function removeChildren(domNode){
@@ -71,6 +76,67 @@ function removeChildren(domNode){
 	}
 }
 
+/*$('#myModal').on('shown', function(e){
+	startClimbingAnimation();
+});*/
+
+//Climbing Transition Animation================================================
+function startClimbingAnimation(){
+var STRING = 'trial';
+
+//setup
+for(var i = 0; i < STRING.length; i++){
+    var div = document.createElement('div');
+    div.innerText = STRING[i];
+    div.setAttribute('class', 'flexchild');
+    div.id = 'climbingChar' + i;
+    document.getElementById('modalmessage').appendChild(div);
+}
+
+//climbing transition animation
+function climbTransition(changeIndex, changeChar){
+    var count = 0,
+        opa   = 1,
+        timer = setInterval(function(){
+            if(count != 50){
+                document.getElementById('climbingChar' + changeIndex).style.opacity = opa;
+                count++;                    
+                opa -= .02;
+            }
+            else{
+                document.getElementById('climbingChar' + changeIndex).style.opacity = 0;
+                clearInterval(timer);
+                setTimeout(function(){
+                    fadeIn('climbingChar' + changeIndex, changeChar);
+                }, 500);
+            }
+        }, 10);
+}
+    
+function fadeIn(from, to){
+    document.getElementById(from).innerText = to;
+var count2 = 0,
+    opa2   = 0,
+    timer = setInterval(function(){
+        if(count2 != 50){
+            document.getElementById(from).style.opacity = opa2;
+            count2++;                    
+            opa2 += .02;
+        }
+        else{
+            document.getElementById(from).style.opacity = 1;
+            clearInterval(timer);
+        }
+    }, 10);
+}
+
+//run it
+climbTransition(4, 'd');
+setTimeout(function(){
+climbTransition(4, 'p');
+}, 3000);
+
+}
 //Socket Setup=================================================================
 
 socket.on('wordlist', function(array){
@@ -88,6 +154,8 @@ socket.on('solution', function(answers) {
 	var answersContainer = document.getElementById('answersContainer');
 	removeChildren(answersContainer);
 	topThree(answers.slice(0,3));
+	document.getElementById('allsolutions').innerText = 'All Possibilities (' 
+		+ answers.length + ')';
 	for(var i = 3; i < answers.length; i++){
 		var answer       = document.createElement('p'),
 		answerArray      = answers[i].split(' ');

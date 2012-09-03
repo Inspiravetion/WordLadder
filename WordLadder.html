@@ -51,6 +51,21 @@
     		height:	-webkit-calc(100% - 38px);
     		height: calc(100% - 38px);
     	}
+    	.flex{
+		    display: -webkit-box;
+		    -webkit-box-pack: center;
+		    background-color: #fff;
+		    height: 100px;
+		    width: 300px;
+		    padding: 5px;
+		}
+		.flexchild{
+		    background-color: #fff;
+		    text-align:center;
+		    margin: 30px 0px;
+		    font-size:140px;
+		    padding: 5px;
+		}
     	/*
     	#first{
     		border-left-width: 1;
@@ -80,16 +95,19 @@
 	    		<div class="nav-collapse collapse">
 	    			<ul class="nav">
 	    				<li class='active'> 
-	    					<a href='#'>Part A</a>
-	    				</li>
-	    				<li>
-	    					<a href='#'>Part B</a>
-	    				</li>
-	    				<li>
-	    					<a href='#'>Part C</a>
+	    					<a href='#'>Part 1</a>
 	    				</li>
 	    				<li> 
-	    					<a href='#'>Part D</a>
+	    					<a href='#'>Part 2A</a>
+	    				</li>
+	    				<li>
+	    					<a href='#'>Part 2B</a>
+	    				</li>
+	    				<li>
+	    					<a href='#'>Part 2C</a>
+	    				</li>
+	    				<li> 
+	    					<a href='#'>Part 2D</a>
 	    				</li>
 	    			</ul>
 	    		</div>
@@ -143,7 +161,7 @@
 		    		<div class='row-fluid'>
 		    			<div class=" span12 centertext hero-unit result" style="padding:10px; height:640;padding-bottom:60px;">
 							<p>
-								<h4 class='column-title'>All Posibilities</h4>
+								<h4 class='column-title' id='allsolutions'>All Posibilities</h4>
 								<div class='styledListContainer' id='answersContainer'>
 								</div>
 							</p>
@@ -156,17 +174,15 @@
 <a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
  
 <div class="modal hide fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style='display:none' data-backdrop='static'>
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <!--<div class="modal-header">
     <h3 id="myModalLabel">Modal header</h3>
   </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div>
+  <div class="modal-body"> -->
+    <p id='modalmessage' class='flex'></p>
+  <!--</div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Save changes</button>
-  </div>
+  </div>-->
 </div>
 
     </div>
