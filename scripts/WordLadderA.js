@@ -57,17 +57,11 @@ function topThree(array){
 }
 
 function showAnswer(e){
-	var ladder = e.target.answer,
-	output     = '';
-	for(rung in ladder){
-		output+= ladder[rung] + '\n';
-	}
-	//document.getElementById('modalmessage').innerText = output;
 	$('#myModal').modal({
     	keyboard: false,
-    	backdrop: 'static'
+    	backdrop: 'false'
 	});
-	startClimbingAnimation();
+	startClimbingAnimation(e.target.answer);
 }
 
 function removeChildren(domNode){
@@ -76,65 +70,74 @@ function removeChildren(domNode){
 	}
 }
 
-/*$('#myModal').on('shown', function(e){
-	startClimbingAnimation();
-});*/
+function getRung(start, end){
+	for(var i = 0; i < start.length; i++){
+		if(start[i] !== end[i]){
+			return {'index' : i, 'letter' : end[i]};
+		}
+	}
+}
 
 //Climbing Transition Animation================================================
-function startClimbingAnimation(){
-var STRING = 'trial';
+function startClimbingAnimation(answer){
+	var START = answer[0];
 
-//setup
-for(var i = 0; i < STRING.length; i++){
-    var div = document.createElement('div');
-    div.innerText = STRING[i];
-    div.setAttribute('class', 'flexchild');
-    div.id = 'climbingChar' + i;
-    document.getElementById('modalmessage').appendChild(div);
-}
+	//setup
+	for(var i = 0; i < START.length; i++){
+	    var div = document.createElement('div');
+	    div.innerText = START[i];
+	    div.setAttribute('class', 'flexchild');
+	    div.id = 'climbingChar' + i;
+	    document.getElementById('modalmessage').appendChild(div);
+	}
 
-//climbing transition animation
-function climbTransition(changeIndex, changeChar){
-    var count = 0,
-        opa   = 1,
-        timer = setInterval(function(){
-            if(count != 50){
-                document.getElementById('climbingChar' + changeIndex).style.opacity = opa;
-                count++;                    
-                opa -= .02;
-            }
-            else{
-                document.getElementById('climbingChar' + changeIndex).style.opacity = 0;
-                clearInterval(timer);
-                setTimeout(function(){
-                    fadeIn('climbingChar' + changeIndex, changeChar);
-                }, 500);
-            }
-        }, 10);
-}
-    
-function fadeIn(from, to){
-    document.getElementById(from).innerText = to;
-var count2 = 0,
-    opa2   = 0,
-    timer = setInterval(function(){
-        if(count2 != 50){
-            document.getElementById(from).style.opacity = opa2;
-            count2++;                    
-            opa2 += .02;
-        }
-        else{
-            document.getElementById(from).style.opacity = 1;
-            clearInterval(timer);
-        }
-    }, 10);
-}
+	function climbTransition(changeIndex, changeChar){
+	    var count = 0,
+	        opa   = 1,
+	        timer = setInterval(function(){
+	            if(count != 50){
+	                document.getElementById('climbingChar' + changeIndex).style.opacity = opa;
+	                count++;                    
+	                opa -= .02;
+	            }
+	            else{
+	                document.getElementById('climbingChar' + changeIndex).style.opacity = 0;
+	                clearInterval(timer);
+	                setTimeout(function(){
+	                    fadeIn('climbingChar' + changeIndex, changeChar);
+	                }, 500);
+	            }
+	        }, 10);
+	}
+	    
+	function fadeIn(from, to){
+	    document.getElementById(from).innerText = to;
+	var count2 = 0,
+	    opa2   = 0,
+	    timer = setInterval(function(){
+	        if(count2 != 50){
+	            document.getElementById(from).style.opacity = opa2;
+	            count2++;                    
+	            opa2 += .02;
+	        }
+	        else{
+	            document.getElementById(from).style.opacity = 1;
+	            clearInterval(timer);
+	        }
+	    }, 10);
+	}
 
-//run it
-climbTransition(4, 'd');
-setTimeout(function(){
-climbTransition(4, 'p');
-}, 3000);
+	var rungCount = 0,
+	headTimer = setInterval(function(){
+		if (rungCount < answer.length - 1) {
+			var rung = getRung(answer[rungCount], answer[rungCount + 1]);
+			climbTransition(rung.index, rung.letter);
+			rungCount++;
+		}
+		else{
+			clearInterval(headTimer);
+		}
+	}, 2000);
 
 }
 //Socket Setup=================================================================
