@@ -57,6 +57,7 @@ function topThree(array){
 }
 
 function showAnswer(e){
+	removeChildren(document.getElementById('modalmessage'));
 	$('#myModal').modal({
     	keyboard: false,
     	backdrop: 'false'
