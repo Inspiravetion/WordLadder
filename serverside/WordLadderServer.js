@@ -81,7 +81,7 @@ io.sockets.on('connection', function(socket){
 
 	socket.emit('wordlist', wordlist);
 
-});
+
 
 //CLIMBING ALGORITHM===========================================================
 
@@ -124,6 +124,7 @@ climb = function(start, end, dict){
 	}
 	var endTime = new Date().getMilliseconds();
 	console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
+	socket.emit('solution', answer);
 };
 
 /*
@@ -168,6 +169,8 @@ solve = function(current, start, target, checked, startFlag){
 		return allAnswers.length != 0? allAnswers : null;
 	}
 };
+
+});
 
 //CLASSES======================================================================
 
@@ -225,10 +228,10 @@ Word = function(word){
 //Testing
 
 	var dict = new Dictionary('/../serverside/dictionary.txt');
-	console.log('STONE -> MONEY:');
+	/*console.log('STONE -> MONEY:');
 	climb('stone', 'money', dict);
 	console.log('CATS -> BARK:');
-	climb('cats', 'bark', dict);
+	climb('cats', 'bark', dict);*/
 
 
 //HELPERS======================================================================

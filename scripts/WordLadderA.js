@@ -6,14 +6,9 @@ document.getElementById('Climb').onclick = climb;
 
 //wont need this when the list is dynamically added
 var wordlist = document.getElementById('wordlist'),
-    words    = wordlist.getElementsByClassName('styledListElement'),
     from     = document.getElementById('fromlabel'),
     to       = document.getElementById('tolabel'),
     fromto   = 0;
-
-	for(w in words){ 
-		words[w].onclick = setLadderPoles;
-	};
 
 //functions====================================================================
 
@@ -34,6 +29,48 @@ function setLadderPoles(e){
 	}
 }
 
+function topThree(array){
+	var first = array[0]? array[0].split(' ') : '',
+	second    = array[1]? array[1].split(' ') : '',
+	third     = array[2]? array[2].split(' ') : '',
+	firstElem = document.getElementById('first'),
+	secElem   = document.getElementById('second'),
+	thirdElem = document.getElementById('third'),
+	counter   = 1;
+	firstElem.innerText = '';
+	secElem.innerText = '';
+	thirdElem.innerText = '';
+	for(f in first){
+		firstElem.innerText += counter + '. ' + first[f] + '\n';
+		counter++;
+	}
+	counter = 1;
+	for(s in second){
+		secElem.innerText += counter + '. ' + second[s] + '\n';
+		counter++;
+	}
+	counter = 1;
+	for(t in third){
+		thirdElem.innerText += counter + '. ' + third[t] + '\n';
+		counter++;
+	}
+}
+
+function showAnswer(e){
+	var ladder = e.target.answer,
+	output     = '';
+	for(rung in ladder){
+		output+= ladder[rung] + '\n';
+	}
+	alert(output);
+}
+
+function removeChildren(domNode){
+	while(domNode.hasChildNodes()){
+		domNode.removeChild(domNode.lastChild);
+	}
+}
+
 //Socket Setup=================================================================
 
 socket.on('wordlist', function(array){
@@ -44,6 +81,21 @@ socket.on('wordlist', function(array){
 		word.setAttribute('class', 'styledListElement');
 		word.onclick   = setLadderPoles;
 		wordContainer.appendChild(word);
+	}
+});
+
+socket.on('solution', function(answers) {
+	var answersContainer = document.getElementById('answersContainer');
+	removeChildren(answersContainer);
+	topThree(answers.slice(0,3));
+	for(var i = 3; i < answers.length; i++){
+		var answer       = document.createElement('p'),
+		answerArray      = answers[i].split(' ');
+		answer.onclick   = showAnswer;
+		answer.answer    = answerArray;
+		answer.innerText = answerArray.length + 'Rungs';
+		answer.setAttribute('class', 'styledListElement');
+		answersContainer.appendChild(answer);
 	}
 });
 
