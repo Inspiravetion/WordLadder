@@ -45,6 +45,7 @@ services = [
 	{'identifier': '/bootstrap/js/bootstrap.min.js'             ,'service': bootstrapJS   ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadder.js'                     ,'service': wordladderJS  ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderA.js'                    ,'service': wordladderAJS ,'mimeType': 'text/javascript' },
+	{'identifier': '/scripts/Ladder.js'                         ,'service': ladderJS      ,'mimeType': 'text/javascript' },
 	{'identifier': '/socket.io/socket.io.js'                    ,'service': socketIOJS    ,'mimeType': 'text/javascript' },
 	{'identifier': '/bootstrap/css/bootstrap.min.css'           ,'service': bootstrapCSS  ,'mimeType': 'text/css'        },
 	{'identifier': '/bootstrap/css/bootstrap-responsive.min.css','service': bootstrapRCSS ,'mimeType': 'text/css'        }
@@ -80,6 +81,11 @@ function wordladderJS() {
 	return output;
 }
 
+function ladderJS() {
+	var output = fs.readFileSync(__dirname + '/../scripts/Ladder.js');
+	return output;
+}
+
 function bootstrapCSS() {
 	var output = fs.readFileSync(__dirname + '/../bootstrap/css/bootstrap.min.css');
 	return output;
@@ -99,7 +105,6 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.emit('wordlist', wordlist);
-
 
 
 //CLIMBING ALGORITHM===========================================================

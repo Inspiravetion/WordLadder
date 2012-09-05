@@ -123,7 +123,10 @@
     	</div>
  
 <div class="modal hide fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style='display:none;overflow:hidden;' data-backdrop='static'>
-	<div class='modal-header'><h3 id='modalheader'></h3></div>
+	<div class='modal-header'>
+        <h3 id='modalheaderleft'></h3>
+        <h3 class='close' id='modalheaderright'></h3>
+    </div>
     <p id='modalmessage' class='flex'></p>
 </div>
 
@@ -131,6 +134,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src='socket.io/socket.io.js' type="text/javascript"></script>
+    <script src='scripts/Ladder.js' type="text/javascript"></script>
+
   <!--  <script src='scripts/WordLadderA.js' type="text/javascript"></script> -->
   </body>
 </html>
