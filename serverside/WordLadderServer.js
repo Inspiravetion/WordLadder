@@ -95,16 +95,27 @@ function bootstrapRCSS() {
 	var output = fs.readFileSync(__dirname + '/../bootstrap/css/bootstrap-responsive.min.css');
 	return output;
 }
+//GLOBAL VARIABLES=============================================================
+
+var wordlist = [],
+sizelist     = [];
 
 //SOCKET SETUP=================================================================
-var wordlist = [];
+
 io.sockets.on('connection', function(socket){
 
 	socket.on('climb', function(params) {
 		climb(params.start, params.end, dict);
 	});
 
-	socket.emit('wordlist', wordlist);
+	socket.on('sizelist', function(){
+		socket.emit('sizelist', sizelist);
+		console.log('SOCKET: got sizelist');
+	});
+
+	socket.on('wordlist', function(){
+		socket.emit('wordlist', wordlist);
+	});
 
 
 //CLIMBING ALGORITHM===========================================================
@@ -213,6 +224,9 @@ Dictionary = function(path){
 	for(w in words){
 		wordObjs.push(new Word(words[w]));
 		wordlist.push(words[w]);
+		if(!contains(words[w].length, sizelist)){
+			sizelist.push(words[w].length);
+		}
 	}
 	linkWords(wordObjs);
 	return wordObjs;
@@ -303,4 +317,14 @@ function remove(val, array) {
 		return true;
 	}
 	return false;
+}
+
+/*
+ * Returns whether the value is contained in the array or not.
+ * @param val the value to be tested 		
+ * @param array  the array to test in 		
+ * @return a boolean of whether the value is in the array.
+ */ 
+function contains(val, array){
+	return (array.indexOf(val) != -1);
 }

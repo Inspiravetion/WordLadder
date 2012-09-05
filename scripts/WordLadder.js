@@ -86,4 +86,6 @@ socket.on('solution', function(answers) {
 	}
 });
 
+socket.emit('wordlist');
+
 }
