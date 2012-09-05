@@ -29,7 +29,8 @@ function reqHandler(req, res) {
 function processAction(action){
 	console.log('Processing action...')
 	for (var i = 0; i < services.length; i++) {	
-		if (action == services[i].identifier) {
+		var tester = new RegExp('.*' + services[i].identifier);
+		if (action.match(tester)) {
 	        var data = services[i].service(),
 	        type     = services[i].mimeType;
 	        return {'data': data, 'mimeType': type};
@@ -39,15 +40,28 @@ function processAction(action){
 }
 
 services = [
-	{'identifier': '/wordladder'                                ,'service': wordladder    ,'mimeType': 'text/html'       },
+	{'identifier': '/wordladder/1'                                ,'service': wordladder    ,'mimeType': 'text/html'       },
+	{'identifier': '/wordladder/2a'                             ,'service': wordladder2a  ,'mimeType': 'text/html'       },	
 	{'identifier': '/bootstrap/js/bootstrap.min.js'             ,'service': bootstrapJS   ,'mimeType': 'text/javascript' },
+	{'identifier': '/scripts/WordLadder.js'                     ,'service': wordladderJS  ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderA.js'                    ,'service': wordladderAJS ,'mimeType': 'text/javascript' },
+	{'identifier': '/socket.io/socket.io.js'                    ,'service': socketIOJS    ,'mimeType': 'text/javascript' },
 	{'identifier': '/bootstrap/css/bootstrap.min.css'           ,'service': bootstrapCSS  ,'mimeType': 'text/css'        },
 	{'identifier': '/bootstrap/css/bootstrap-responsive.min.css','service': bootstrapRCSS ,'mimeType': 'text/css'        }
 ];
 
 function wordladder() {
 	var output = fs.readFileSync(__dirname + '/../WordLadder.html');
+	return output;
+}
+
+function socketIOJS(argument) {
+	var output = fs.readFileSync(__dirname + '/../scripts/socket.io.min.js');
+	return output;
+}
+
+function wordladder2a() {
+	var output = fs.readFileSync(__dirname + '/../WordLadder2a.html');
 	return output;
 }
 
@@ -58,6 +72,11 @@ function bootstrapJS() {
 
 function wordladderAJS() {
 	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderA.js');
+	return output;
+}
+
+function wordladderJS() {
+	var output = fs.readFileSync(__dirname + '/../scripts/WordLadder.js');
 	return output;
 }
 
