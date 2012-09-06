@@ -15,7 +15,7 @@ var wordlist = document.getElementById('wordlist'),
 function climb(){
 	var start = document.getElementById('fromlabel').innerText.split('From: ')[1],
 	end       = document.getElementById('tolabel').innerText.split('To: ')[1];
-	socket.emit('climb', {'start': start, 'end': end});
+	socket.emit('climb1', {'start': start, 'end': end});
 }
 
 function setLadderPoles(e){ 

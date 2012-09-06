@@ -29,8 +29,8 @@ socket.on('sizelist', function(array){
 	}
 });
 
-/*socket.on('solution', function(answers) {
-	var answersContainer = document.getElementById('answersContainer');
+socket.on('solution', function(answers) {
+/*	var answersContainer = document.getElementById('answersContainer');
 	removeChildren(answersContainer);
 	topThree(answers.slice(0,3));
 	document.getElementById('allsolutions').innerText = 'All Possibilities (' 
@@ -43,8 +43,9 @@ socket.on('sizelist', function(array){
 		answer.innerText = answerArray.length + 'Rungs';
 		answer.setAttribute('class', 'styledListElement');
 		answersContainer.appendChild(answer);
-	}
-});*/
+	}*/
+	console.log(answers);
+});
 
 socket.emit('sizelist');
 
