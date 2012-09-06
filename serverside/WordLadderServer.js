@@ -122,7 +122,7 @@ io.sockets.on('connection', function(socket){
 //GLOBAL VARIABLES=============================================================
 
 var wordlist = [],
-sizelist     = [],
+sizelist     = [];
 
 //CLASSES======================================================================
 

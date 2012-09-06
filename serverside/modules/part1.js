@@ -5,7 +5,6 @@ var climber = require('./climber.js');
 //EXPORTS======================================================================
 
 exports.climb = function(start, end, dict, socket){
-	climber.loadDictionary(dict);
 	climber.climb(start,end, socket, '1');
 };
 

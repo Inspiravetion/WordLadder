@@ -11,10 +11,6 @@
  * @param dict is the dictionary object that holds all the Word objects 
  */ 
 exports.climb = function(start, end, dict, socket, stage, linker){
-	console.log(dict);
-	console.log(linker);
-	return;
-	linker(dict);
 	var startTime = new Date().getMilliseconds();
 	var top, bottom;
 	for(var i = 0; i < dict.length;i++){
@@ -28,7 +24,6 @@ exports.climb = function(start, end, dict, socket, stage, linker){
 			break;
 		}
 	}
-	console.log(top);
 	//reporting the results...this will change
 	var answer = solve(top, top, bottom, [], true);
 	if(answer){
@@ -51,7 +46,7 @@ exports.climb = function(start, end, dict, socket, stage, linker){
 		}
 	}
 	else{
-		socket.emit('nosolution');
+		//socket.emit('nosolution');
 	}
 };
 
