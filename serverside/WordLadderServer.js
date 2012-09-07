@@ -102,6 +102,7 @@ function bootstrapRCSS() {
 io.sockets.on('connection', function(socket){
 
 	socket.on('climb1', function(params) {
+		console.log('GOT CLIMB COMMAND');
 		part1.climb(params.start, params.end, dict1, socket);
 	});
 

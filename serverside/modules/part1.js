@@ -5,7 +5,7 @@ var climber = require('./climber.js');
 //EXPORTS======================================================================
 
 exports.climb = function(start, end, dict, socket){
-	climber.climb(start,end, socket, '1');
+	climber.climb(start,end, dict, socket, '1');
 };
 
 /*

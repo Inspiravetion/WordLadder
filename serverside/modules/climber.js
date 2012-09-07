@@ -10,7 +10,7 @@
  * @param end is the string that should be at the bottom of the word ladder 		
  * @param dict is the dictionary object that holds all the Word objects 
  */ 
-exports.climb = function(start, end, dict, socket, stage, linker){
+exports.climb = function(start, end, dict, socket, stage){
 	var startTime = new Date().getMilliseconds();
 	var top, bottom;
 	for(var i = 0; i < dict.length;i++){
@@ -26,6 +26,8 @@ exports.climb = function(start, end, dict, socket, stage, linker){
 	}
 	//reporting the results...this will change
 	var answer = solve(top, top, bottom, [], true);
+	console.log('top: ' + top);
+	console.log('bottom: ' + bottom);
 	if(answer){
 		answer.sort(function(a,b){
 				if((a.split(' ').length) > (b.split(' ').length)){
@@ -39,14 +41,15 @@ exports.climb = function(start, end, dict, socket, stage, linker){
 		if(stage == '1'){
 			var endTime = new Date().getMilliseconds();
 			console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
-			socket.emit('solution', answer);
+			console.log(answer);
+			//socket.emit('solution', answer);
 		}
 		else if(stage == '2a'){
 			return answer;
 		}
 	}
 	else{
-		//socket.emit('nosolution');
+		socket.emit('nosolution');
 	}
 };
 

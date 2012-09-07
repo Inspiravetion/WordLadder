@@ -40,7 +40,8 @@ if(cluster.isMaster){
 			toList = [];
 		}
 		cluster.on('disconnect', function(){
-			deadcount++;
+			//bug here where this runs twice the second time you make
+			//an api call...3 times the third time...4 times the 4th time...etc
 			if(isEmpty(cluster.workers)){
 				//this sort is not working correctly
 				/*answers.sort(function(a,b){
@@ -60,7 +61,7 @@ if(cluster.isMaster){
 				});*/
 				var endTime = new Date().getSeconds();
 				//console.log(answers);
-				//socket.emit('solution', answers);
+				socket.emit('solution', answers);
 			    console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 			}
 	    });
