@@ -10,7 +10,7 @@ if(cluster.isMaster){
 
 	//EXPORTS==================================================================
 
-	exports.climb = function(size, words, dict, socket){
+	exports.climb = function(size, words, socket){
 		var startTime = new Date().getSeconds();
 		var answers = [],
 		toList      = [];
@@ -31,8 +31,6 @@ if(cluster.isMaster){
 					worker.send({
 						'start'  : words[i],
 						'end'    : toList,
-						'dict'   : dict,
-						'socket' : null,
 						'stage'  : '2a'
 					});
 					startcount++;
@@ -60,8 +58,8 @@ if(cluster.isMaster){
 						return 0;
 				});*/
 				var endTime = new Date().getSeconds();
-				//console.log(answers);
-				socket.emit('solution', answers);
+				console.log(answers);
+				//socket.emit('solution', answers);
 			    console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 			}
 	    });
@@ -110,7 +108,7 @@ else{
 		}
 		part1.linkWords(wordObjs);
 		for(var i = 1; i < wordObjs.length; i++){
-			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, msg.socket, msg.stage, part1.linkWords);
+			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
 			if(answer){
 				answers.push(answer);
 			}

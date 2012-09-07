@@ -107,7 +107,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('climb2', function(size){
-		part2.climb(size, wordlist, dict1, socket);
+		part2.climb(size, wordlist, socket);
 	});
 
 	socket.on('sizelist', function(){
@@ -141,7 +141,7 @@ Dictionary = function(path, linker){
 			sizelist.push(words[w].length);
 		}
 	}
-	//linker(wordObjs);
+	linker(wordObjs);
 	return wordObjs;
 };
 

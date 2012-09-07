@@ -26,8 +26,6 @@ exports.climb = function(start, end, dict, socket, stage){
 	}
 	//reporting the results...this will change
 	var answer = solve(top, top, bottom, [], true);
-	console.log('top: ' + top);
-	console.log('bottom: ' + bottom);
 	if(answer){
 		answer.sort(function(a,b){
 				if((a.split(' ').length) > (b.split(' ').length)){
@@ -41,14 +39,13 @@ exports.climb = function(start, end, dict, socket, stage){
 		if(stage == '1'){
 			var endTime = new Date().getMilliseconds();
 			console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
-			console.log(answer);
-			//socket.emit('solution', answer);
+			socket.emit('solution', answer);
 		}
 		else if(stage == '2a'){
 			return answer;
 		}
 	}
-	else{
+	else if(socket){
 		socket.emit('nosolution');
 	}
 };
