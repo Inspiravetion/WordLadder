@@ -8,7 +8,7 @@ exports.part2a = function(){
 }
 
 exports.part2b = function() {
-	return(require('part2b'));
+	return(require('./part2b.js'));
 }
 
 exports.part2c = function(){

@@ -58,8 +58,8 @@ if(cluster.isMaster){
 						return 0;
 				});*/
 				var endTime = new Date().getSeconds();
-				console.log(answers);
-				//socket.emit('solution', answers);
+				//console.log(answers);
+				socket.emit('solution', answers);
 			    console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 			}
 	    });
