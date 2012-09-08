@@ -1,6 +1,6 @@
 (function(){
 
-	ladder = function(){
+	Ladder = function(){
 
 		var self = this;
 
@@ -164,6 +164,6 @@
 		return this;
 	}
 
-	ladder = new ladder();
+	ladder = new Ladder();
 	
 })();

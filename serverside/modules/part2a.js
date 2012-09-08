@@ -40,29 +40,25 @@ if(cluster.isMaster){
 			toList = [];
 		}
 		cluster.on('disconnect', function(){
-			//bug here where this runs twice the second time you make
-			//an api call...3 times the third time...4 times the 4th time...etc
 			if(isEmpty(cluster.workers)){
-				//this sort is not working correctly
-				/*answers.sort(function(a,b){
-						if(a[0][0] > b[0][0]){
+				answers.sort(function(a,b){
+					var aLine = a[0][0].split(' '),
+					bLine     = b[0][0].split(' ');
+						if(aLine[0] > bLine[0]){
 							return 1;
 						}
-						else if(a[0][0] < b[0][0]){
+						else if(aLine[0] < bLine[0]){
 							return -1;
 						}
-						else if(a[0][a.length -1] > b[0][b.length - 1]){
+						else if(aLine[aLine.length -1] > bLine[bLine.length - 1]){
 							return 1;
 						}
-						else if(a[0][a.length -1] < b[0][b.length - 1]){
+						else if(aLine[aLine.length -1] < bLine[bLine.length - 1]){
 							return -1;
 						}
 						return 0;
-				});*/
-				var endTime = new Date().getSeconds();
-				//console.log(answers);
+				});
 				socket.emit('solution', answers);
-			    console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 			}
 	    });
 	};
