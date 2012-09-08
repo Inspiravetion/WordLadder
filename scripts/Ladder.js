@@ -11,8 +11,7 @@
 		    	backdrop: 'false'
 			});
 			var headerL = document.getElementById('modalheaderleft');
-			headerL.innerText = 'From: ' + 
-				e.target.answer[0] + '\t To: ' + e.target.answer[e.target.answer.length - 1];
+			headerL.innerText = e.target.answer[0] + ' \t | \t ' + e.target.answer[e.target.answer.length - 1];
 			var headerR = document.getElementById('modalheaderright');
 			headerR.innerText =  e.target.answer.length + ' rungs'
 			startClimbingAnimation(e.target.answer);
@@ -30,6 +29,10 @@
 					return {'index' : i, 'letter' : end[i]};
 				}
 			}
+		}
+
+		this.getLoader = function(screen){
+			return new Loader(screen);
 		}
 
 		//Internals============================================================
@@ -93,6 +96,70 @@
 			}, 2000);
 
 		}
+
+		Loader = function(loadScreen){
+            var self   = this,
+            message    = 'LOADING',
+            timerFlag  = true;
+            
+
+            this.start = function(){
+                loadScreen.innerText = message;
+                loadOut();            
+
+            };
+
+            this.stop = function(){
+                timerFlag = false;
+            };
+
+            function loadIn(){
+                var count = 0,
+                opa       = 0,
+                timer     = setInterval(function(){
+                    if(timerFlag && count != 50){
+                        loadScreen.style.opacity = opa;
+                        opa += .02;
+                        count++;
+                    }
+                    else if(timerFlag){
+                        loadScreen.style.opacity = 1;
+                        clearInterval(timer);
+                        loadOut();
+                    }
+                    else{
+                        clearInterval(timer);
+                    }               
+                }, 10);
+            }
+    
+            function loadOut(){
+                
+                var count = 0, 
+                opa       = 1,
+                timer     = setInterval(function(){
+                    if(timerFlag && count != 50){
+                        loadScreen.style.opacity = opa;
+                        opa -= .02;
+                        count++;
+                    }
+                    else if(timerFlag){
+                        clearInterval(timer);
+                        loadScreen.style.opacity = 0;
+                        setTimeout(function(){
+                            loadIn();
+                        }, 500);
+                    }
+                    else{
+                        clearInterval(timer);
+                        //get rid of modal
+                    }
+                }, 10);   
+            }
+        
+            return this;
+		}
+
 		return this;
 	}
 

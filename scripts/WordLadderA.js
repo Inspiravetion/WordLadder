@@ -8,33 +8,32 @@ window.onload = function(){
 
 //functions====================================================================
 
-accordianFactory = function(){
+accordionFactory = function(){
 	var aCount = 0,
 	groupCount = 0,
 	self       = this;
 
-	this.createAccordianGroup = function(header, body){
+	this.createAccordionGroup = function(header, body){
 		var aGroup = document.createElement('div');
-		aGroup.setAttribute('class', 'accordian-group');
+		aGroup.setAttribute('class', 'accordion-group');
 
 		var aHeading = document.createElement('div');
-		aHeading.setAttribute('class', 'accordian-heading');
+		aHeading.setAttribute('class', 'accordion-heading');
 
 		var aToggle = document.createElement('a');
-		aToggle.setAttribute('class', 'accordian-toggle');
+		aToggle.setAttribute('class', 'accordion-toggle');
 		aToggle.setAttribute('data-toggle', 'collapse');
-		aToggle.setAttribute('data-parent', '#accordian' + aCount);
+		aToggle.setAttribute('data-parent', '#accordion' + aCount);
 		aToggle.setAttribute('href', '#collapse' + groupCount);
 		aToggle.innerText = header;
 
+
 		var aBody = document.createElement('div');
-		aBody.setAttribute('class', 'accordian-body');
-		aBody.setAttribute('class', 'collapse');
-		aBody.setAttribute('class', 'in');
+		aBody.setAttribute('class', 'accordion-body collapse ');
 		aBody.id = 'collapse' + groupCount;
 
 		var aInner = document.createElement('div');
-		aInner.setAttribute('class', 'accordian-inner');
+		aInner.setAttribute('class', 'accordion-inner');
 		aInner.innerText = body;
 
 		aBody.appendChild(aInner);
@@ -47,15 +46,16 @@ accordianFactory = function(){
 		return aGroup;
 	};
 
-	this.createAccordian = function(child, parent){
-		var accordian = document.createElement('div');
-		accordian.setAttribute('class', 'accordian');
-		accordian.id = 'accordian' + aCount;
+	this.createAccordian = function(children, parent){
+		var accordion = document.createElement('div');
+		accordion.setAttribute('class', 'accordion');
+		accordion.id = 'accordion' + aCount;
 
 		aCount++;
-
-		accordian.appendChild(child);
-		parent.appendChild(accordian);
+		for(child in children){
+			accordion.appendChild(children[child]);
+		}
+		parent.appendChild(accordion);
 	};
 
 
@@ -81,36 +81,49 @@ socket.on('sizelist', function(array){
 		var word       = document.createElement('p');
 		word.innerText = array[a];
 		word.setAttribute('class', 'styledListElement');
-		//word.onclick   = setLadderPoles; THIS WILL HAVE TO BE DIFFERENT...LADDER.STARTCLIMBINGANIMATION()?
+		word.onclick   = climb;
 		sizeContainer.appendChild(word);
 	}
 });
 
 socket.on('solution', function(answers) {
-	var answersContainer = document.getElementById('size-solutions');
+	var answersContainer = document.getElementById('size-solutions'),
+	aGroups              = [];
 	ladder.removeChildren(answersContainer);
-	/*document.getElementById('allsolutions').innerText = 'All Possibilities (' 
-		+ answers.length + ')';
-	for(var i = 3; i < answers.length; i++){
-		var answer       = document.createElement('p'),
-		answerArray      = answers[i].split(' ');
-		answer.onclick   = showAnswer;
-		answer.answer    = answerArray;
-		answer.innerText = answerArray.length + 'Rungs';
-		answer.setAttribute('class', 'styledListElement');
-		answersContainer.appendChild(answer);
-	}
-	console.log(answers);*/
-
-	var child = aFactory.createAccordianGroup('Test Header', 'Test Body...');
-	aFactory.createAccordian(child, answersContainer);
-
+	for(var i = 0; i < answers.length; i++){
+		for(var j = 0; j < answers[i].length; j++){
+			var innerString = '',
+			line            = answers[i][j][0].split(' '),
+			header          = line[0] + ' | ' + line[line.length - 1];
+			for(var k = 0; k < answers[i][j].length; k++){
+				innerString += answers[i][j][k] + '\n';
+			}
+			aGroups.push(aFactory.createAccordionGroup(header, innerString));
+		}
+	}	
+	aFactory.createAccordian(aGroups, answersContainer);
+	//still need to sort these for the right order
+	loader.stop();
+	loader = null;
+	$('#myModal').modal('hide');
 });
 
 socket.emit('sizelist');
 
+//=============================================================================
+
+function climb(e){
+	socket.emit('climb2', parseInt(e.target.innerText));
+	loader = ladder.getLoader(document.getElementById('modalmessage'));
+	loader.start();
+	$('#myModal').modal({
+    	keyboard: false,
+	   	backdrop: 'false'
+	});
+}
 
 //Globals======================================================================
-var aFactory = new accordianFactory();
+var aFactory = new accordionFactory(),
+loader;
 
 }

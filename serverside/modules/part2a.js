@@ -24,7 +24,9 @@ if(cluster.isMaster){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
 						if(msg.answer){
-							answers.push(msg.answer);
+							if(msg.answer.length != 0){
+								answers.push(msg.answer);
+							}
 							this.destroy();
 						}
 					});
@@ -109,7 +111,8 @@ else{
 		part1.linkWords(wordObjs);
 		for(var i = 1; i < wordObjs.length; i++){
 			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
-			if(answer){
+			if(answer && answer[0]){
+				console.log(answer);
 				answers.push(answer);
 			}
 		}
