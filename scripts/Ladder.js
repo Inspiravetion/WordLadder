@@ -92,6 +92,7 @@
 				}
 				else{
 					clearInterval(headTimer);
+					$('#myModal').modal('hide');
 				}
 			}, 2000);
 

@@ -104,7 +104,7 @@ socket.on('solution', function(answers) {
 	aFactory.createAccordian(aGroups, answersContainer);
 	//still need to sort these for the right order
 	loader.stop();
-	loader = null;
+	
 	$('#myModal').modal('hide');
 });
 
