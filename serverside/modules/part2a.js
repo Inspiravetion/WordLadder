@@ -114,10 +114,6 @@ else{
 		}
 		process.send({'answer': answers});
 	});
-
-	/*PASS IN ALL OF THE WORDS OF A SPECIFIC LENGTH AND HAVE IT MAKE THEM INTO 
-	A SMALLER DICTIONARY...THEN LINK THEM GIVEN THE PASSED IN LINKER METHOD AND 
-	SOLVE ALL OF THOSE LADDERS OF THAT LENGTH IN THEIR OWN THREAD.*/
 }
 
 //HELPERS======================================================================

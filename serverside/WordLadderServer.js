@@ -1,3 +1,15 @@
+/*
+ * 
+ * 		
+ * YOU ARE ONLY PRINTING FROM A->B BUT NOT FROM B->A...ITERATE THROUGH AND PRINT THE REVERSE ORDERS
+ * 		
+ * 
+ */ 
+
+
+
+
+
 //HTTP SERVER SETUP============================================================
 var http         = require('http'),
 	fs           = require('fs'),
@@ -40,8 +52,9 @@ function processAction(action){
 }
 
 services = [
-	{'identifier': '/wordladder/1'                                ,'service': wordladder    ,'mimeType': 'text/html'       },
+	{'identifier': '/wordladder/1'                              ,'service': wordladder    ,'mimeType': 'text/html'       },
 	{'identifier': '/wordladder/2a'                             ,'service': wordladder2a  ,'mimeType': 'text/html'       },	
+	{'identifier': '/wordladder/2b'                             ,'service': wordladder2b  ,'mimeType': 'text/html'       },	
 	{'identifier': '/bootstrap/js/bootstrap.min.js'             ,'service': bootstrapJS   ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadder.js'                     ,'service': wordladderJS  ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderA.js'                    ,'service': wordladderAJS ,'mimeType': 'text/javascript' },
@@ -63,6 +76,11 @@ function socketIOJS(argument) {
 
 function wordladder2a() {
 	var output = fs.readFileSync(__dirname + '/../WordLadder2a.html');
+	return output;
+}
+
+function wordladder2b() {
+	var output = fs.readFileSync(__dirname + '/../WordLadder2b.html');
 	return output;
 }
 

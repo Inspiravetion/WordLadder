@@ -31,6 +31,7 @@ exports.linkWords = function(array){
  */ 
 function oneAway(stringA, stringB){
 	var diff = 0;
+	if(Math.abs(stringA.length - stringB.length))
 	for(var i = 0; i < stringA.length; i++){
 		if(stringA[i] !== stringB[i]){
 			diff++;
