@@ -207,7 +207,8 @@ dict1 = new Dictionary('/short_dictionary.txt', part1.linkWords);
 
 var part2 = require('./modules/wordladder').part2a();
 
-
+var climber = require('./modules/climber.js');
+climber.climb('ear', 'day', dict1, null, '2a');
 
 
 //Helpers======================================================================
