@@ -1,7 +1,8 @@
 //SETUP FOR MULTIPLE THREADS===================================================
 var cluster = require('cluster'),
 climber     = require('./climber.js'),
-part1       = require('./part1.js');
+part1       = require('./part1.js'),
+fs          = require('fs');
 
 var deadcount = 0,
 startcount    = 0;
@@ -58,7 +59,8 @@ if(cluster.isMaster){
 						}
 						return 0;
 				});
-				socket.emit('solution', answers);
+				//socket.emit('solution', answers);
+				fs.writeFileSync('./output.txt', answers);
 			}
 	    });
 	};
