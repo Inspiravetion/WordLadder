@@ -1,8 +1,7 @@
 //SETUP FOR MULTIPLE THREADS===================================================
 var cluster = require('cluster'),
 climber     = require('./climber.js'),
-part1       = require('./part1.js'),
-fs          = require('fs');
+part1       = require('./part1.js');
 
 var deadcount = 0,
 startcount    = 0;
@@ -24,12 +23,13 @@ if(cluster.isMaster){
 			if(words[i].length == size){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
-						if(msg.answer && msg.answer.length != 0){
-							answers.push(msg.answer);
+						if(msg.answer){
+							if(msg.answer.length != 0){
+								answers.push(msg.answer);
+							}
 							this.destroy();
 						}
 					});
-					//THIS DOESNT GO TO THE WORDS THAT COME BEFORE THE STARTER...FIX THAT
 					worker.send({
 						'start'  : words[i],
 						'end'    : toList,
@@ -58,9 +58,6 @@ if(cluster.isMaster){
 						}
 						return 0;
 				});
-				//console.log('trying to write out the data...');
-				fs.writeFileSync('./output.txt', answers);
-				// console.log('finished writing out file');
 				socket.emit('solution', answers);
 			}
 	    });
@@ -99,7 +96,6 @@ else{
 	return this;
 };
 	var self = this;
-	//recreate a subset of the dictionary that could not be passed to worker
 	process.on('message', function(msg) {
 		var wordObjs = [],
 		answers      = [];
