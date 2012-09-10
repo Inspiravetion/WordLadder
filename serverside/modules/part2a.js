@@ -1,8 +1,7 @@
 //SETUP FOR MULTIPLE THREADS===================================================
 var cluster = require('cluster'),
 climber     = require('./climber.js'),
-part1       = require('./part1.js'),
-fs          = require('fs');
+part1       = require('./part1.js');
 
 var deadcount = 0,
 startcount    = 0;
@@ -24,13 +23,11 @@ if(cluster.isMaster){
 			if(words[i].length == size){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
-						console.log('master recieved message');
 						if(msg.answer){
 							if(msg.answer.length != 0){
 								answers.push(msg.answer);
 							}
 							this.destroy();
-							console.log('Worker ' + this.id + ' was terminated.');
 						}
 					});
 					worker.send({
@@ -44,7 +41,6 @@ if(cluster.isMaster){
 		}
 		cluster.on('disconnect', function(){
 			if(isEmpty(cluster.workers)){
-				console.log('sorting answers.')
 				answers.sort(function(a,b){
 					var aLine = a[0][0].split(' '),
 					bLine     = b[0][0].split(' ');
@@ -62,12 +58,8 @@ if(cluster.isMaster){
 						}
 						return 0;
 				});
-				//socket.emit('solution', answers);
-				console.log('trying to write out data');
-				//fs.writeFileSync('./output.txt', answers);
-				console.log('finished writing out data :)');
+				socket.emit('solution', answers);
 			}
-			console.log(Object.keys(cluster.workers).length + ' workers still working');
 	    });
 	};
 }
