@@ -64,6 +64,9 @@ exports.climb = function(start, end, dict, socket, stage){
 	else if(socket){
 		socket.emit('nosolution');
 	}
+	console.log(top);
+	console.log('\n\n');
+	console.log(bottom);
 };
 
 /*
