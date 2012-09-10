@@ -1,5 +1,6 @@
 //MULTITHREADING SETUP=========================================================
 var cluster = require('cluster'),
+touched     = [],
 worker;
 
 cluster.setupMaster({
@@ -24,24 +25,30 @@ exports.climb = function(start, end, dict, socket, stage){
 	for(var i = 0; i < dict.length;i++){
 		if(dict[i].value == start){
 			top = dict[i];
-		}
-		if(dict[i].value == end){
-			bottom = dict[i];
-		}
-		if(top && bottom){
 			break;
 		}
+		// if(dict[i].value == end){
+		// 	bottom = dict[i];
+		// }
+		// if(top && bottom){
+		// 	break;
+		// }
 	}
 	if(stage != '1'){
 		worker = cluster.fork();
 		worker.on('message', function(msg){
-			socket.emit('solution',msg.data);
-			console.log('\nWorker destroyed...\n');
-			this.destroy();
+			if(msg.data){
+				socket.emit('solution',msg.data);
+				console.log('\nWorker destroyed...\n');
+				this.destroy();
+			}		
 		});
 	}
+	console.log('about to solve...');
 	var answer = solve(top, top, bottom, [], true, stage);
-	worker.send({'kill' : true});
+	// runOrDone(dict, start, stage);
+	worker.send({kill: true});
+	//worker.send({done : true});
 	if(answer){
 		answer.sort(function(a,b){
 				if((a.split(' ').length) > (b.split(' ').length)){
@@ -64,9 +71,9 @@ exports.climb = function(start, end, dict, socket, stage){
 	else if(socket){
 		socket.emit('nosolution');
 	}
-	console.log(top);
+	//console.log(top);
 	console.log('\n\n');
-	console.log(bottom);
+	//console.log(bottom);
 };
 
 /*
@@ -86,10 +93,10 @@ exports.climb = function(start, end, dict, socket, stage){
  * one in the recursive call
  */ 	
 solve = function(current, start, target, checked, startFlag, stage){
-	if(current === target){
+	/*if(current === target){
 		return [current.value];
-	}
-	else if((current === start && !startFlag) || (current.similar.length == 0)
+	}*/
+	 if((current === start && !startFlag) || (current.similar.length == 0)
 		|| (checked.indexOf(current) != -1)){
 		return null;
 	}
@@ -111,6 +118,12 @@ solve = function(current, start, target, checked, startFlag, stage){
 					}
 				}
 			}
+			else{
+				allAnswers.push([current.value]);
+			}
+		}
+		if(!contains(current.value, touched)){
+			touched.push(current.value);
 		}
 		current.reset();
 		remove(current, checked);
@@ -119,6 +132,27 @@ solve = function(current, start, target, checked, startFlag, stage){
 };
 
 //HELPERS======================================================================
+
+/*function runOrDone(dict, start, stage){
+	var checkMe;
+	for(var i = 0; i < dict.length; i++){
+		if(dict[i].value.length == start.length &&
+			!contains(dict[i].value, touched)){
+			checkMe = dict[i];
+			break;
+		}
+	}
+	if(checkMe){
+		console.log('now checking ' + checkMe.value)
+		//console.log(touched);
+		touched.push(checkMe.value);
+		solve(checkMe, null, null, [], true, stage);
+		runOrDone(dict, start, stage);
+	}
+	else{
+		worker.send({kill : true});
+	}
+}*/
 
 /*
  * Removes the given value from the given array		
@@ -131,4 +165,14 @@ function remove(val, array) {
 		return true;
 	}
 	return false;
+}
+
+/*
+ * Returns whether the value is contained in the array or not.
+ * @param val the value to be tested 		
+ * @param array  the array to test in 		
+ * @return a boolean of whether the value is in the array.
+ */ 
+function contains(val, array){
+	return (array.indexOf(val) != -1);
 }

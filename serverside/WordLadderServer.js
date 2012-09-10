@@ -139,7 +139,15 @@ io.sockets.on('connection', function(socket){
 	//Delete this
 	socket.on('trial', function(){
 		var climber = require('./modules/climber.js');
-		climber.climb('ear', 'day', dict1, socket, '2a');
+		var compare = 'ear',
+		start       = new Word('');
+		for (word in dict1){
+			if(dict1[word].value.length == compare.length && dict1[word].similar.length > 
+				start.similar.length){
+				start = dict1[word];
+			}
+		}
+		climber.climb('cat', 'cat', dict1, socket, '2a');
 	});
 	//Delete this
 

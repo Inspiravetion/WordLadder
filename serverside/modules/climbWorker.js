@@ -1,7 +1,8 @@
 var self = this,
 cluster  = require('cluster'),
 fs       = require('fs'),
-data     = [];
+data     = [],
+touched  = [];
 
 console.log('Worker Started');
 
@@ -13,7 +14,7 @@ process.on('message', function(msg){
 	}
 	else{
 		if(!contains(msg.data, data)){
-			data.push(msg.data);			
+			data.push(msg.data);		
 		}
 	}
 });
