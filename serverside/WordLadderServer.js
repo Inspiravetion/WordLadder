@@ -125,7 +125,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('climb2', function(size){
-		part2a.climb(size, wordlist, socket, './part2a.txt', true);
+		part2a.climb(size, wordlist, socket, './output.txt', false);
 	});
 
 	socket.on('climb3', function(){
