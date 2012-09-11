@@ -20,7 +20,7 @@ exports.climb = function(start, socket){
 exports.linkWords = function(array){
 	for(var i = 0; i < array.length - 1; i++){
 		for(var j = i + 1; j < array.length; j++){
-			if(Math.abs(array[i].length - array[j].length) == 1 && 
+			if(Math.abs(array[i].length - array[j].length) <= 1 && 
 				sameOrder(array[i].value, array[j].value)){
 				array[i].link(array[j]);
 			}

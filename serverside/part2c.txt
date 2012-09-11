@@ -29,8 +29,8 @@ cloud loud
 coat cat 
 cold old 
 cover over 
-cup up 
-cup up 
+cup cup up 
+cup cup up 
 dear ear 
 do dog 
 dog do 
@@ -162,6 +162,8 @@ the he then
 then the 
 thin thing tin 
 thing thin 
+through through 
+through through 
 till ill still 
 tin in thin 
 to toe top 
