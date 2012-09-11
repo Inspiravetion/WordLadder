@@ -6,13 +6,8 @@ offset      = 0;
 
 //EXPORTS======================================================================
 
-/*
- * Section off all the words into arrays based on their length and then call 2a's 		
- * climb() giving it a call back to append the results from the next words to 		
- * the file and start on the next set of words or stop the whole cycle if its 		
- * done.
- */ 
 exports.climb = function(dict, socket){
+	//store all of the possibilities in all...have the length be the property etc. all.['' + 1] = []
 	dict.sort(function(a,b){
 		if(a.value.length < b.value.length){
 			return -1;
@@ -35,6 +30,14 @@ exports.climb = function(dict, socket){
 		}
 	}
 	all.push(temp);
+	// console.log(all);
+	//call part2a's climb for all lengths passing it a callback
+		//could also just pass it the path to the file and have it append to it
+			//if you did this you would have to add an append vs. overwrite flag ro 2a
+	//when you get the answers back, store them so that you can send them when someone connects..
+		//nevermind thats stupid cuz you can have 2a's climb do all the work and report the answers in order
+
+	
 	part2a.climb(all[offset][0].length, all[offset], socket, 
 		 './part2b.txt', false, findNext);
 
