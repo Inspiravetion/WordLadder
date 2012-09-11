@@ -4,6 +4,7 @@ climber     = require('./climber.js'),
 part1       = require('./part1.js'),
 fs          = require('fs');
 
+//look into this
 process.setMaxListeners(0);
 
 var deadcount = 0,
@@ -17,13 +18,16 @@ if(cluster.isMaster){
 		var startTime = new Date().getSeconds();
 		var answers = [],
 		toList      = [];
-		//not getting all the words here...not backtracking to the ones you already went through
+		//Uses the size passed in to scale down the dictionary to only encompass
+		//words of that length for when it is passed to the worker 'thread'
 		for(var i = 0; i < words.length - 1; i++){
-			for(var j = i + 1; j < words.length; j++){
-				if(words[i].length == size && words[j].length == size){
+			for(var j = 0; j < words.length - 1; j++){
+				if(words[i].length == size && words[j].length == size && i != j){
 					toList.push(words[j]);
 				}
 			}
+			//opens a 'thread' to process each word and all of its possible 
+			//paths and kills it once it reports its results.
 			if(words[i].length == size){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
@@ -34,6 +38,7 @@ if(cluster.isMaster){
 							this.destroy();
 						}
 					});
+					//starts the worker
 					worker.send({
 						'start'  : words[i],
 						'end'    : toList,
@@ -43,6 +48,8 @@ if(cluster.isMaster){
 			}
 			toList = [];
 		}
+		//Waits for all workers to be done, then processes the results and
+		//displays them 
 		cluster.on('disconnect', function(){
 			if(isEmpty(cluster.workers)){
 				answers.sort(function(a,b){
@@ -65,12 +72,12 @@ if(cluster.isMaster){
 				//socket.emit('solution', answers);
 				if(overWrite){
 					//take option that overwrites file
+					//writeFileSync might work for this
 					console.log('shouldnt write to file');
 				}
 				else{
-					//dont forget you need to format this string at some point
 					console.log('should be writing the file out');
-					fs.appendFileSync(filepath, answers);
+					fs.appendFileSync(filepath, formattedString(answers));
 					if(callback){
 						callback();
 					}
@@ -80,6 +87,10 @@ if(cluster.isMaster){
 	};
 }
 //WORKER THREAD================================================================
+// This is not really a thread but rather a process. So it doesn't share     //
+// memory with the main 'thread', and as it can't be passed circular objects //
+// the dictionary has to be rebuilt each time a worker thread is spawned :/  //
+// The only plus size is it is a scaled down version of the dictionary       //
 else{
 
 	Word = function(word){
@@ -111,6 +122,7 @@ else{
 	};
 	return this;
 };
+	//Creating small dictionary of word objects.
 	var self = this;
 	process.on('message', function(msg) {
 		var wordObjs = [],
@@ -121,6 +133,8 @@ else{
 			wordObjs.push(w);
 		}
 		part1.linkWords(wordObjs);
+		//Iterates through all of the possible start | end patterns and stores
+		//the answers before returning them to the main 'thread'
 		for(var i = 1; i < wordObjs.length; i++){
 			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
 			if(answer && answer[0]){
@@ -136,4 +150,12 @@ else{
 
 var isEmpty = function(obj) {
   return Object.keys(obj).length === 0;
+}
+
+function formattedString(data){
+	var output = '';
+	for(line in data){
+		output += data[line] + '\n';
+	}
+	return output;
 }
