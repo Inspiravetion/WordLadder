@@ -20,9 +20,10 @@ if(cluster.isMaster){
 		toList      = [];
 		//Uses the size passed in to scale down the dictionary to only encompass
 		//words of that length for when it is passed to the worker 'thread'
+		//***MAKE SURE TO ALSO PRINT THE REVERSE OF THESE SO YOU ARE NOT MISSING ANY
 		for(var i = 0; i < words.length - 1; i++){
-			for(var j = 0; j < words.length - 1; j++){
-				if(words[i].length == size && words[j].length == size && i != j){
+			for(var j = i + 1; j < words.length; j++){
+				if(words[i].length == size && words[j].length == size){
 					toList.push(words[j]);
 				}
 			}
@@ -72,8 +73,8 @@ if(cluster.isMaster){
 				//socket.emit('solution', answers);
 				if(overWrite){
 					//take option that overwrites file
-					//writeFileSync might work for this
-					console.log('shouldnt write to file');
+					fs.writeFileSync(filepath, formattedString(answers));
+					console.log('should be overwriting the old file');
 				}
 				else{
 					console.log('should be writing the file out');
@@ -136,9 +137,11 @@ else{
 		//Iterates through all of the possible start | end patterns and stores
 		//the answers before returning them to the main 'thread'
 		for(var i = 1; i < wordObjs.length; i++){
+			console.log('Start: ' + msg.start);
+			console.log('Finish: ' + wordObjs[i].value);
 			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
 			if(answer && answer[0]){
-				console.log(answer);
+				//console.log(answer);
 				answers.push(answer);
 			}
 		}
