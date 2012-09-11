@@ -2,7 +2,6 @@ a
 able
 about
 account
-acid
 across
 act
 addition
@@ -28,10 +27,8 @@ any
 apparatus
 apple
 approval
-arch
 argument
 arm
-army
 art
 as
 at
@@ -42,8 +39,6 @@ attraction
 authority
 automatic
 awake
-baby
-back
 bad
 bag
 balance
@@ -76,7 +71,6 @@ blood
 blow
 blue
 board
-boat
 body
 boiling
 bone
@@ -108,13 +102,11 @@ but
 butter
 button
 by
-cake
 camera
 canvas
 card
 care
 carriage
-cart
 cat
 cause
 certain
@@ -127,7 +119,6 @@ cheese
 chemical
 chest
 chief
-chin
 church
 circle
 clean
@@ -181,7 +172,6 @@ danger
 dark
 daughter
 day
-dead
 dear
 death
 debt
@@ -208,7 +198,6 @@ distribution
 division
 do
 dog
-door
 doubt
 down
 drain
@@ -218,7 +207,6 @@ drink
 driving
 drop
 dry
-dust
 ear
 early
 earth
@@ -234,7 +222,6 @@ engine
 enough
 equal
 error
-even
 event
 ever
 every
@@ -264,7 +251,6 @@ fiction
 field
 fight
 finger
-fire
 first
 fish
 fixed
@@ -286,7 +272,6 @@ form
 forward
 fowl
 frame
-free
 frequent
 friend
 from
@@ -304,7 +289,6 @@ glove
 go
 goat
 gold
-good
 government
 grain
 grass

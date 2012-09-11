@@ -1,16 +1,15 @@
 //GLOBAL VARIABLES=============================================================
 
-
 //EXPORTS======================================================================
 
 exports.climb = function(start, socket){
-	//just print out the starting words similar array...you are already linking
-	//all of them
-	var output = '';
-	for( s in start.similar){
-		output += start.similar[s].value + '\n';
+	if(start.similar.length != 0){
+		var output = start.value + ' ';
+		for( s in start.similar){
+			output += start.similar[s].value + ' ';
+		}
+		return output;
 	}
-	console.log(output);
 };
 
 /*
