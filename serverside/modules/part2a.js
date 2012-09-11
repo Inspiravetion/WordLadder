@@ -7,7 +7,8 @@ fs          = require('fs');
 process.setMaxListeners(0);
 
 var deadcount = 0,
-startcount    = 0;
+startcount    = 0,
+reporting     = false;
 //MASTER THREAD================================================================
 if(cluster.isMaster){
 
@@ -27,11 +28,14 @@ if(cluster.isMaster){
 			if(words[i].length == size){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
+						reporting = false;
 						if(msg.answer){
 							if(msg.answer.length != 0){
+								//console.log(msg.answer);
 								answers.push(msg.answer);
 							}
 							this.destroy();
+							console.log(answers);
 						}
 					});
 					worker.send({
@@ -44,8 +48,8 @@ if(cluster.isMaster){
 			toList = [];
 		}
 		cluster.on('disconnect', function(){
-			if(isEmpty(cluster.workers)){
-				answers.sort(function(a,b){
+			if(isEmpty(cluster.workers) && !reporting){
+				/*answers.sort(function(a,b){
 					var aLine = a[0][0].split(' '),
 					bLine     = b[0][0].split(' ');
 						if(aLine[0] > bLine[0]){
@@ -61,20 +65,45 @@ if(cluster.isMaster){
 							return -1;
 						}
 						return 0;
-				});
+				});*/
 				//socket.emit('solution', answers);
-				if(overWrite){
+				var worker = cluster.fork();
+				worker.on('message', function(msg){
+					if(msg.doneReporting){
+						reporting = true;	
+						worker.destroy();
+						console.log('results worker finished');
+						if(callback && reporting){
+							callback();
+							console.log('callback got called');
+						}
+
+					}
+				});
+
+							console.log(answers);
+
+				worker.send({
+					'answers'  : answers,
+					'overwrite': false,
+					'filepath' : filepath
+				});
+				/*if(overWrite){
 					//take option that overwrites file
-					console.log('shouldnt write to file');
-				}
-				else{
-					//dont forget you need to format this string at some point
-					console.log('should be writing the file out');
-					fs.appendFileSync(filepath, answers);
+					console.log('should be overwriting old file');
+					//fs.writeFileSync(filepath, formattedString(answers));
 					if(callback){
 						callback();
 					}
 				}
+				else{
+					//dont forget you need to format this string at some point
+					console.log('should be writing the file out');
+					//fs.appendFileSync(filepath, formattedString(answers));
+					if(callback){
+						callback();
+					}
+				}*/
 			}
 	    });
 	};
@@ -113,22 +142,37 @@ else{
 };
 	var self = this;
 	process.on('message', function(msg) {
-		var wordObjs = [],
-		answers      = [];
-		wordObjs.push(new Word(msg.start));
-		for(word in msg.end){
-			var w = new Word(msg.end[word]);
-			wordObjs.push(w);
-		}
-		part1.linkWords(wordObjs);
-		for(var i = 1; i < wordObjs.length; i++){
-			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
-			if(answer && answer[0]){
-				console.log(answer);
-				answers.push(answer);
+		if(msg.stage){	
+			var wordObjs = [],
+			answers      = [];
+			wordObjs.push(new Word(msg.start));
+			for(word in msg.end){
+				var w = new Word(msg.end[word]);
+				wordObjs.push(w);
 			}
+			part1.linkWords(wordObjs);
+			for(var i = 1; i < wordObjs.length; i++){
+				var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
+				if(answer && answer[0]){
+					//console.log(answer);
+					answers.push(answer);
+				}
+			}
+			process.send({'answer': answers});
 		}
-		process.send({'answer': answers});
+		else if(msg.filepath){
+			console.log('reporter worker started');
+			//console.log('FROM WORKER: these are the answers I got' + msg.answers);
+			msg.answers.sort(inOrder);
+			var answerString = formattedString(msg.answers);
+			if(msg.overwrite){
+
+			}
+			else{
+				fs.appendFileSync(msg.filepath, answerString);
+			}
+			process.send({'doneReporting' : true});
+		}
 	});
 }
 
@@ -136,4 +180,35 @@ else{
 
 var isEmpty = function(obj) {
   return Object.keys(obj).length === 0;
+}
+
+function inOrder(a,b){
+	var aLine = a[0][0].split(' '),
+	bLine     = b[0][0].split(' ');
+	if(aLine[0] > bLine[0]){
+		return 1;
+	}
+	else if(aLine[0] < bLine[0]){
+		return -1;
+	}
+	else if(aLine[aLine.length -1] > bLine[bLine.length - 1]){
+		return 1;
+	}
+	else if(aLine[aLine.length -1] < bLine[bLine.length - 1]){
+		return -1;
+	}
+	return 0;
+}
+
+function formattedString(data){
+	var output = '';
+	for (line in data){
+		if(typeof data[line] == 'string'){
+			output += data[line] + '\n';
+		}
+		else if(data[line] instanceof Array){
+			output += formattedString(data[line]);
+		}
+	}
+	return output;
 }
