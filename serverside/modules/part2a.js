@@ -66,21 +66,24 @@ if(cluster.isMaster){
 						}
 						return 0;
 				});
-				//socket.emit('solution', answers);
+				var stringOut = formattedString(answers);
 				if(overWrite){
-					//take option that overwrites file
 					console.log('should be overwriting old file');
-					fs.writeFileSync(filepath, formattedString(answers));
+					socket.emit('solution', stringOut);
+					fs.writeFileSync(filepath, stringOut);
 					if(callback){
-						setTimeout(callback, 500);
+						//setTimeout(callback, 500);
+						callback(stringOut);
 					}
 				}
 				else{
 					//dont forget you need to format this string at some point
 					console.log('should be writing the file out');
-					fs.appendFileSync(filepath, formattedString(answers));
+					socket.emit('solution', stringOut);
+					fs.appendFileSync(filepath, stringOut);
 					if(callback){
-						setTimeout(callback, 500);
+						//setTimeout(callback, 500);
+						callback(stringOut);
 					}
 				}
 			}

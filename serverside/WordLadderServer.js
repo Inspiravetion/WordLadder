@@ -58,6 +58,7 @@ services = [
 	{'identifier': '/bootstrap/js/bootstrap.min.js'             ,'service': bootstrapJS   ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadder.js'                     ,'service': wordladderJS  ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderA.js'                    ,'service': wordladderAJS ,'mimeType': 'text/javascript' },
+	{'identifier': '/scripts/WordLadderB.js'                    ,'service': wordladderBJS ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/Ladder.js'                         ,'service': ladderJS      ,'mimeType': 'text/javascript' },
 	{'identifier': '/socket.io/socket.io.js'                    ,'service': socketIOJS    ,'mimeType': 'text/javascript' },
 	{'identifier': '/bootstrap/css/bootstrap.min.css'           ,'service': bootstrapCSS  ,'mimeType': 'text/css'        },
@@ -91,6 +92,11 @@ function bootstrapJS() {
 
 function wordladderAJS() {
 	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderA.js');
+	return output;
+}
+
+function wordladderBJS() {
+	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderB.js');
 	return output;
 }
 

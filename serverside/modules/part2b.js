@@ -2,7 +2,8 @@
 var climber = require('./climber.js'),
 part2a      = require('./wordladder').part2a(),
 all         = [],
-offset      = 0;
+offset      = 0,
+count       = 0;
 
 //EXPORTS======================================================================
 
@@ -30,6 +31,7 @@ exports.climb = function(dict, socket){
 		}
 	}
 	all.push(temp);
+	socket.emit('expect', all.length);
 	// console.log(all);
 	//call part2a's climb for all lengths passing it a callback
 		//could also just pass it the path to the file and have it append to it
@@ -45,14 +47,16 @@ exports.climb = function(dict, socket){
 	 * Makes the whole thing synchronous so that the different sized words get 		
 	 * reported in order of length
 	 */ 
-	function findNext(){
+	function findNext(solution){
 		console.log('Moving to next set of words.');
 		if(offset < all.length){
+			socket.emit('solution', solution);
 			offset++;
 			part2a.climb(all[offset][0].length, all[offset], socket, 
 				 './part2b.txt', false);
 		}
 		else{
+			socket.emit('solution', 'this is just to test if it gets here');
 			console.log('All Done.');
 		}
 	}
