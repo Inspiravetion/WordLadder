@@ -16,5 +16,5 @@ exports.part2c = function(){
 }
 
 exports.part2d = function(){
-	return(require('part2d'));
+	return(require('./part2d.js'));
 }

@@ -20,8 +20,10 @@ exports.climb = function(start, socket){
 exports.linkWords = function(array){
 	for(var i = 0; i < array.length - 1; i++){
 		for(var j = i + 1; j < array.length; j++){
-			if(Math.abs(array[i].length - array[j].length) == 1 && 
-				sameOrder(array[i].value, array[j].value)){
+			if((Math.abs(array[i].length - array[j].length) <= 1 
+				&& sameOrder(array[i].value, array[j].value)) 
+				|| (array[i].length == array[j].length 
+				&& oneAway(array[i].value, array[j].value))){
 				array[i].link(array[j]);
 			}
 		}
@@ -56,4 +58,19 @@ function sameOrder(a, b){
 		}
 	}
 	return true;
+};
+
+/*
+ * Checks to see if the two words are 1 character away from eachother or not 		
+ * @param stringA is the first string to be compared 		
+ * @param stringB is the second string to be compared
+ */ 
+function oneAway(stringA, stringB){
+	var diff = 0;
+	for(var i = 0; i < stringA.length; i++){
+		if(stringA[i] !== stringB[i]){
+			diff++;
+		}
+	}
+	return diff == 1? true: false; 
 };
