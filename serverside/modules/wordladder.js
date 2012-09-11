@@ -12,9 +12,9 @@ exports.part2b = function() {
 }
 
 exports.part2c = function(){
-	return(require('./part2c.js'));
+	return(require('part2c'));
 }
 
 exports.part2d = function(){
-	return(require('./part2d.js'));
+	return(require('part2d'));
 }
