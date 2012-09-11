@@ -30,14 +30,12 @@ if(cluster.isMaster){
 			if(words[i].length == size){
 				var worker = cluster.fork();
 					worker.on('message', function(msg) {
-						reporting = false;
 						if(msg.answer){
 							if(msg.answer.length != 0){
 								console.log(msg.answer);
 								answers.push(msg.answer);
 							}
 							this.destroy();
-							console.log(answers);
 						}
 					});
 					worker.send({
