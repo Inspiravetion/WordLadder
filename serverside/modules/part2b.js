@@ -1,41 +1,61 @@
 //Global Variables=============================================================
-var climber = require('./climber.js');
+var climber = require('./climber.js'),
+part2a      = require('./wordladder').part2a(),
+all         = [],
+offset      = 0;
 
 //EXPORTS======================================================================
 
-exports.climb = function(start, end, dict, socket){
-	climber.climb(start,end, dict, socket, '2b');
-};
+exports.climb = function(dict, socket){
+	//store all of the possibilities in all...have the length be the property etc. all.['' + 1] = []
+	dict.sort(function(a,b){
+		if(a.value.length < b.value.length){
+			return -1;
+		}
+		else if(b.value.length < a.value.length){
+			return 1;
+		}
+	});
+	var start = 0,
+	temp      = [];
+	for(var i = 0; i < dict.length; i++){
+		if(dict[start].value.length == dict[i].value.length){
+			temp.push(dict[i].value);
+		}
+		else{
+			all.push(temp);
+			temp = [];
+			start = i;
+			temp.push(dict[start].value);
+		}
+	}
+	all.push(temp);
+	// console.log(all);
+	//call part2a's climb for all lengths passing it a callback
+		//could also just pass it the path to the file and have it append to it
+			//if you did this you would have to add an append vs. overwrite flag ro 2a
+	//when you get the answers back, store them so that you can send them when someone connects..
+		//nevermind thats stupid cuz you can have 2a's climb do all the work and report the answers in order
 
-/*
- * Bi-directionally links two Word objects that are one letter away from 
- * eachother so that they have references to eachother for the climbing process		
- * @param array is an Array of Word objects (Dictionary)
- */ 
-exports.linkWords = function(array){
-	for(var i = 0; i < array.length - 1; i++){
-		for(var j = i + 1; j < array.length; j++){
-			if(oneAway(array[i].value, array[j].value)){
-				array[i].link(array[j]);
-			}
+	
+	part2a.climb(all[offset][0].length, all[offset], socket, 
+		 './part2b.txt', false, findNext);
+
+	/*
+	 * Makes the whole thing synchronous so that the different sized words get 		
+	 * reported in order of length
+	 */ 
+	function findNext(){
+		console.log('Moving to next set of words.');
+		if(offset < all.length){
+			offset++;
+			part2a.climb(all[offset][0].length, all[offset], socket, 
+				 './part2b.txt', false);
+		}
+		else{
+			console.log('All Done.');
 		}
 	}
 };
 
-//HELPERS======================================================================
 
-/*
- * Checks to see if the two words are 1 character away from eachother or not 		
- * @param stringA is the first string to be compared 		
- * @param stringB is the second string to be compared
- */ 
-function oneAway(stringA, stringB){
-	var diff = 0;
-	if(Math.abs(stringA.length - stringB.length))
-	for(var i = 0; i < stringA.length; i++){
-		if(stringA[i] !== stringB[i]){
-			diff++;
-		}
-	}
-	return diff == 1? true: false; 
-};  

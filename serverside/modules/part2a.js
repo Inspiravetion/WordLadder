@@ -4,6 +4,8 @@ climber     = require('./climber.js'),
 part1       = require('./part1.js'),
 fs          = require('fs');
 
+process.setMaxListeners(0);
+
 var deadcount = 0,
 startcount    = 0;
 //MASTER THREAD================================================================
@@ -11,10 +13,11 @@ if(cluster.isMaster){
 
 	//EXPORTS==================================================================
 
-	exports.climb = function(size, words, socket){
+	exports.climb = function(size, words, socket, filepath, overWrite, callback){
 		var startTime = new Date().getSeconds();
 		var answers = [],
 		toList      = [];
+		//not getting all the words here...not backtracking to the ones you already went through
 		for(var i = 0; i < words.length - 1; i++){
 			for(var j = i + 1; j < words.length; j++){
 				if(words[i].length == size && words[j].length == size){
@@ -60,7 +63,18 @@ if(cluster.isMaster){
 						return 0;
 				});
 				//socket.emit('solution', answers);
-				fs.writeFileSync('./output.txt', answers);
+				if(overWrite){
+					//take option that overwrites file
+					console.log('shouldnt write to file');
+				}
+				else{
+					//dont forget you need to format this string at some point
+					console.log('should be writing the file out');
+					fs.appendFileSync(filepath, answers);
+					if(callback){
+						callback();
+					}
+				}
 			}
 	    });
 	};

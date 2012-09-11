@@ -1,0 +1,19 @@
+//README
+
+***I sam assuming you have already scp'd all of the files over to rlogin
+
+STEP 1. Install Node.js
+	$>:tar -xzvf node-v0.8.3.tar.gz 
+	$>:cd node-v0.8.3 
+	$>:./configure
+	$>:make
+	$>:sudo make install ***NOTE YOUR USERNAME MUST BE IN THE SUDOERS FILE AND YOU MUST HAVE THE SUDO PASSWORD***
+
+STEP 2.Get Socket.IO Module
+	$>:npm install socket.io
+
+STEP 3. Start Server
+	$>:cd ../serverside
+	$>:node WordLadderServer.js
+
+STEP 4. Point Browser to 'http://[rlogin IP]:8000/wordladder/1'

@@ -125,7 +125,11 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('climb2', function(size){
-		part2.climb(size, wordlist, socket);
+		part2a.climb(size, wordlist, socket, './output.txt', false);
+	});
+
+	socket.on('climb3', function(){
+		part2b.climb(dict1, socket);
 	});
 
 	socket.on('sizelist', function(){
@@ -205,7 +209,9 @@ Word = function(word){
 var part1 = require('./modules/wordladder').part1(),
 dict1 = new Dictionary('/short_dictionary.txt', part1.linkWords);
 
-var part2 = require('./modules/wordladder').part2a();
+var part2a = require('./modules/wordladder').part2a();
+
+var part2b = require('./modules/wordladder').part2b();
 
 
 
