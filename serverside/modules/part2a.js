@@ -33,7 +33,8 @@ if(cluster.isMaster){
 						if(msg.answer){
 							if(msg.answer.length != 0){
 								console.log(msg.answer);
-								answers.push(msg.answer);
+								//answers.push(msg.answer);
+								answers = answers.concat(msg.answer);
 							}
 							this.destroy();
 						}
@@ -51,8 +52,8 @@ if(cluster.isMaster){
 			if(isEmpty(cluster.workers)){
 				// RETHINK THIS SORTING!!!
 				answers.sort(function(a,b){
-					var aLine = a[0][0].split(' '),
-					bLine     = b[0][0].split(' ');
+						var aLine = a.split(' '),
+						bLine = b.split(' ');
 						if(aLine[0] > bLine[0]){
 							return 1;
 						}
@@ -65,7 +66,14 @@ if(cluster.isMaster){
 						else if(aLine[aLine.length -1] < bLine[bLine.length - 1]){
 							return -1;
 						}
+						else if(aLine.length < bLine.length){
+							return -1;
+						}
+						else if(aLine.length > bLine.length){
+							return 1;
+						}
 						return 0;
+
 				});
 				var stringOut = formattedString(answers);
 				if(overWrite){
@@ -137,7 +145,8 @@ else{
 			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
 			if(answer && answer[0]){
 				var tempAnswer = reverseToArr(answer);
-				answers.push(answer.concat(tempAnswer));
+				//answers.push(answer.concat(tempAnswer));
+				answers = answers.concat(answer,tempAnswer);
 			}
 		}
 		process.send({'answer': answers});
