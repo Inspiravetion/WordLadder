@@ -155,6 +155,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('climb2', function(size){
+		//USE THE OLLLLLLD VERSION TO DO THIS...ATLEAST YOULL GET THE RIGHT ANSWER
 		part2a.climb(size, wordlist, socket, './part2a.txt', true);
 	});
 
