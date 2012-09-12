@@ -49,6 +49,7 @@ if(cluster.isMaster){
 		}
 		cluster.on('disconnect', function(){
 			if(isEmpty(cluster.workers)){
+				// RETHINK THIS SORTING!!!
 				answers.sort(function(a,b){
 					var aLine = a[0][0].split(' '),
 					bLine     = b[0][0].split(' ');
@@ -135,7 +136,8 @@ else{
 		for(var i = 1; i < wordObjs.length; i++){
 			var answer = climber.climb(msg.start , wordObjs[i].value, wordObjs, null, msg.stage, part1.linkWords);
 			if(answer && answer[0]){
-				answers.push(answer);
+				var tempAnswer = reverseToArr(answer);
+				answers.push(answer.concat(tempAnswer));
 			}
 		}
 		process.send({'answer': answers});
@@ -159,4 +161,22 @@ function formattedString(data){
 		}
 	}
 	return output;
+}
+
+function reverseToArr(array){
+	var out = [];
+	for (a in array){
+		out.push(reverseMe(array[a], ' '));
+	}
+	return out;
+}
+
+function reverseMe(string, delim){
+	var arr  = string.split(delim),
+	out      = '';
+	arr2     = arr.reverse();
+	for(a in arr2){
+		out += arr2[a] + delim;
+	}
+	return out;
 }

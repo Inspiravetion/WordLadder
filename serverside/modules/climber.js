@@ -1,4 +1,4 @@
-
+var fs = require('fs');
 //CLIMBING ALGORITHM===========================================================
 
 /*
@@ -10,7 +10,7 @@
  * @param end is the string that should be at the bottom of the word ladder 		
  * @param dict is the dictionary object that holds all the Word objects 
  */ 
-exports.climb = function(start, end, dict, socket, stage){
+exports.climb = function(start, end, dict, socket, stage, filepath){
 	var startTime = new Date().getMilliseconds();
 	var top, bottom;
 	for(var i = 0; i < dict.length;i++){
@@ -24,7 +24,6 @@ exports.climb = function(start, end, dict, socket, stage){
 			break;
 		}
 	}
-	//reporting the results...this will change
 	var answer = solve(top, top, bottom, [], true);
 	if(answer){
 		answer.sort(function(a,b){
@@ -40,6 +39,11 @@ exports.climb = function(start, end, dict, socket, stage){
 			var endTime = new Date().getMilliseconds();
 			console.log('\n\nTime Check: ' + (endTime - startTime) + ' milliseconds');
 			socket.emit('solution', answer);
+			var out = '';
+			for(a in answer){
+				out += answer[a] + '\n';
+			}
+			fs.writeFileSync(filepath, out);
 		}
 		else if(stage == '2a'){
 			return answer;

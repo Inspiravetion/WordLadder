@@ -5,11 +5,6 @@
  * 		
  * 
  */ 
-
-
-
-
-
 //HTTP SERVER SETUP============================================================
 var http         = require('http'),
 	fs           = require('fs'),

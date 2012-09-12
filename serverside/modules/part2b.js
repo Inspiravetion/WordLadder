@@ -8,7 +8,6 @@ count       = 0;
 //EXPORTS======================================================================
 
 exports.climb = function(dict, socket){
-	//store all of the possibilities in all...have the length be the property etc. all.['' + 1] = []
 	dict.sort(function(a,b){
 		if(a.value.length < b.value.length){
 			return -1;
@@ -32,16 +31,8 @@ exports.climb = function(dict, socket){
 	}
 	all.push(temp);
 	socket.emit('expect', all.length);
-	// console.log(all);
-	//call part2a's climb for all lengths passing it a callback
-		//could also just pass it the path to the file and have it append to it
-			//if you did this you would have to add an append vs. overwrite flag ro 2a
-	//when you get the answers back, store them so that you can send them when someone connects..
-		//nevermind thats stupid cuz you can have 2a's climb do all the work and report the answers in order
-
-	
 	part2a.climb(all[offset][0].length, all[offset], socket, 
-		 './part2b.txt', false, findNext);
+		 './part2b.txt', true, findNext);
 
 	/*
 	 * Makes the whole thing synchronous so that the different sized words get 		
