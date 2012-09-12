@@ -55,10 +55,14 @@ services = [
 	{'identifier': '/wordladder/1'                              ,'service': wordladder    ,'mimeType': 'text/html'       },
 	{'identifier': '/wordladder/2a'                             ,'service': wordladder2a  ,'mimeType': 'text/html'       },	
 	{'identifier': '/wordladder/2b'                             ,'service': wordladder2b  ,'mimeType': 'text/html'       },	
+	{'identifier': '/wordladder/2c'                             ,'service': wordladder2c  ,'mimeType': 'text/html'       },	
+	{'identifier': '/wordladder/2d'                             ,'service': wordladder2d  ,'mimeType': 'text/html'       },	
 	{'identifier': '/bootstrap/js/bootstrap.min.js'             ,'service': bootstrapJS   ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadder.js'                     ,'service': wordladderJS  ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderA.js'                    ,'service': wordladderAJS ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/WordLadderB.js'                    ,'service': wordladderBJS ,'mimeType': 'text/javascript' },
+	{'identifier': '/scripts/WordLadderC.js'                    ,'service': wordladderCJS ,'mimeType': 'text/javascript' },
+	{'identifier': '/scripts/WordLadderD.js'                    ,'service': wordladderDJS ,'mimeType': 'text/javascript' },
 	{'identifier': '/scripts/Ladder.js'                         ,'service': ladderJS      ,'mimeType': 'text/javascript' },
 	{'identifier': '/socket.io/socket.io.js'                    ,'service': socketIOJS    ,'mimeType': 'text/javascript' },
 	{'identifier': '/bootstrap/css/bootstrap.min.css'           ,'service': bootstrapCSS  ,'mimeType': 'text/css'        },
@@ -85,6 +89,16 @@ function wordladder2b() {
 	return output;
 }
 
+function wordladder2c() {
+	var output = fs.readFileSync(__dirname + '/../WordLadder2c.html');
+	return output;
+}
+
+function wordladder2d() {
+	var output = fs.readFileSync(__dirname + '/../WordLadder2d.html');
+	return output;
+}
+
 function bootstrapJS() {
 	var output = fs.readFileSync(__dirname + '/../bootstrap/js/bootstrap.min.js');
 	return output;
@@ -97,6 +111,16 @@ function wordladderAJS() {
 
 function wordladderBJS() {
 	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderB.js');
+	return output;
+}
+
+function wordladderCJS() {
+	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderC.js');
+	return output;
+}
+
+function wordladderDJS() {
+	var output = fs.readFileSync(__dirname + '/../scripts/WordLadderD.js');
 	return output;
 }
 
@@ -135,6 +159,7 @@ io.sockets.on('connection', function(socket){
 	});
 
 	socket.on('climb3', function(){
+		console.log('got the climb command from part 2b');
 		part2b.climb(dict1, socket);
 	});
 
@@ -144,6 +169,7 @@ io.sockets.on('connection', function(socket){
 		for(word in dict2){
 			output += (answer = part2c.climb(dict2[word], socket))? answer + '\n' : '';
 		}
+		socket.emit('solution', output);
 		fs.writeFileSync('./part2c.txt', output);
 	});
 
@@ -153,6 +179,7 @@ io.sockets.on('connection', function(socket){
 		for(word in dict3){
 			output += (answer = part2d.climb(dict3[word], socket))? answer + '\n' : '';
 		}
+		socket.emit('solution', output);
 		fs.writeFileSync('./part2d.txt', output);
 	});
 

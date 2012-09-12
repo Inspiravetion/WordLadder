@@ -92,7 +92,6 @@ socket.emit('sizelist');
 
 //=============================================================================
 
-// socket.on('connection', function(){
 	socket.emit('climb3');
 	loader = ladder.getLoader(document.getElementById('modalmessage'));
 	loader.start();
@@ -100,7 +99,6 @@ socket.emit('sizelist');
     	keyboard: false,
 	   	backdrop: 'false'
 	});
-// });
 
 //Globals======================================================================
 var aFactory = new accordionFactory(),
